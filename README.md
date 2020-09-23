@@ -13,4 +13,4 @@ Create playlists directly to your Spotify account with fine tuned preferences su
 ## Credits
 - [8-bit Heart image](https://www.deviantart.com/kennywfz/art/Glassy-8-Bit-Heart-Icon-293833929)
 - [Bootstrap 4](https://getbootstrap.com/)
-- [Spotify]()
+- [Spotify](https://developer.spotify.com/documentation/web-api/)
