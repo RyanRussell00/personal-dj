@@ -1,4 +1,5 @@
 # Personal DJ Website
+Use it [live here](https://personal-dj-app.herokuapp.com/) <br>
 Create playlists directly to your Spotify account with fine tuned preferences such as:
 - How *danceable* you want each track
 - How much *energy* you want each track
