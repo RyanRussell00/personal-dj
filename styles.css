@@ -1,0 +1,49 @@
+#login,
+#loggedin,
+#search-pagination,
+#step-2,
+#playlist-button {
+    display: none;
+}
+
+.selected-track {
+    box-shadow: 0 0 0.8rem 0.1rem rgba(0, 128, 0, 0.5) !important;
+    transform: scale(1.1);
+    z-index: 999;
+}
+
+.text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 500px;
+}
+
+.login-btn {
+    background-color: #1DB954;
+    border-color: #191414;
+}
+
+.login-btn:hover {
+    background-color: white;
+    color: #1DB954;
+    border-color: #1DB954;
+}
+
+.login-btn:active {
+    background-color: #1DB954 !important;
+    border-color: #191414 !important;
+    color: white !important;
+}
+
+.login-btn:focus {
+    box-shadow: 0 0 0 .2rem #1DB954;
+}
+
+.spotify-green-bg {
+    background-color: #1DB954;
+}
+
+.spotify-black-border {
+    border-color: #191414;
+}

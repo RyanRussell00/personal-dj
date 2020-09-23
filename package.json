@@ -1,0 +1,23 @@
+{
+  "author": "Ryan Russell",
+  "name": "personal-dj",
+  "description": "Personal Spotify DJ",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "nodemon ./app.js",
+    "ui": "browser-sync start --proxy=localhost:8000 --files='**/*.css, **/*.pug, **/*.js' --ignore=node_modules --reload-delay 10 --no-ui --no-notify",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "axios": "^0.20.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.4",
+    "express": "^4.17.1",
+    "node-localstorage": "^2.1.6",
+    "querystring": "^0.2.0",
+    "request": "^2.88.2"
+  },
+  "engines": {
+    "node": "12.0.0"
+  }
+}
