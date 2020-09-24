@@ -107,16 +107,16 @@ app.get('/callback', function (req, res) {
                 })
                     .then(response => {
                         _user_id = response.data.id;
-                        res.redirect("/#" + querystring.stringify({ authorized: true })); // Do not pass access token or refresh token in header
+                        res.redirect("/#" + querystring.stringify({ authorized: 'access_granted' })); // Do not pass access token or refresh token in header
                     })
                     .catch(error => {
                         console.log("Failed to load user account: " + error);
-                        res.redirect("/#" + querystring.stringify({ authorized: false }));
+                        res.redirect("/#" + querystring.stringify({ authorized: 'account_failure' }));
                     });
             })
             .catch(error => {
                 console.log("Failed to login: " + error);
-                res.redirect("/#" + querystring.stringify({ authorized: false }));
+                res.redirect("/#" + querystring.stringify({ authorized: 'access_denied' }));
             });
     }
 });

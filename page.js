@@ -1,6 +1,6 @@
 // const { parse } = require("querystring");
 
-(function() {
+(function () {
 
     /**
      * Obtains parameters from the hash of the URL
@@ -29,16 +29,26 @@
     recList_id = [];
 
     if (error) {
-        msg = error;
         if (error.status === 429) {
             msg += params.Retry - After;
         }
         isValidLogin(false);
     } else {
-        isValidLogin(true);
+        console.log(authorized + " " + (authorized == true));
+        if (authorized == null) {
+            isValidLogin(false);
+        } else {
+            // authorized = Boolean(authorized);
+            console.log(authorized + " " + (authorized == 'access_granted'));
+            if (authorized == 'access_granted') {
+                isValidLogin(true);
+            } else {
+                isValidLogin(false);
+            }
+        }
 
         // listener for track search button
-        document.getElementById('search-track').addEventListener('click', function(e) {
+        document.getElementById('search-track').addEventListener('click', function (e) {
             e.preventDefault();
             validateForm('track-id');
             let track_id_element = document.getElementById('track-id');
@@ -49,7 +59,7 @@
         }, false);
 
         // listener for search results backwards pagination
-        document.getElementById('search-last').addEventListener('click', function(e) {
+        document.getElementById('search-last').addEventListener('click', function (e) {
             e.preventDefault();
             validateForm('track-id');
             let track_id_element = document.getElementById('track-id');
@@ -65,7 +75,7 @@
         }, false);
 
         // listener for search results forwards pagination
-        document.getElementById('search-next').addEventListener('click', function(e) {
+        document.getElementById('search-next').addEventListener('click', function (e) {
             e.preventDefault();
             validateForm('track-id');
             let track_id_element = document.getElementById('track-id');
@@ -88,7 +98,7 @@
                     'track_value': track_name,
                     'searchOffset': offset
                 }
-            }).done(function(data) {
+            }).done(function (data) {
                 if (showErrorIfExists(data)) {
                     trackResult = data.trackResult.tracks.items;
                     displaySearchResults(trackResult);
@@ -97,9 +107,9 @@
         }
 
         // listener for recommendations button
-        document.getElementById('rec-button').addEventListener('click', function(e) {
+        document.getElementById('rec-button').addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             let seed_artists = trackResult[0].artists[0].id;
             let seed_tracks = selectedTrackId;
 
@@ -107,7 +117,7 @@
             if (!seed_tracks || seed_tracks == "" || !seed_artists || seed_artists == "") {
                 alert("Please select a track first.");
             }
-           
+
             let dance = 'danceability';
             let energy = 'energy';
             let popular = 'popular';
@@ -153,7 +163,7 @@
                     'energy': energy,
                     'popular': popular,
                 }
-            }).done(function(data) {
+            }).done(function (data) {
                 if (showErrorIfExists(data)) {
                     recList_id = displayRecommendations(data.trackResult);
                 }
@@ -161,7 +171,7 @@
         }, false);
 
         // listener for create playlist button
-        document.getElementById('playlist-button').addEventListener('click', function(e) {
+        document.getElementById('playlist-button').addEventListener('click', function (e) {
             e.preventDefault();
             let dance = document.getElementById('danceability').value;
             let energy = document.getElementById('energy').value;
@@ -179,7 +189,7 @@
                     'energy': energy,
                     'dance': dance
                 }
-            }).done(function(data) {
+            }).done(function (data) {
                 showErrorIfExists(data);
             });
 
@@ -245,7 +255,7 @@ function showErrorIfExists(data) {
 }
 
 function isValidLogin(valid) {
-    
+    valid = Boolean(valid);
     if (valid == true) {
         $('#login').hide();
         $('#loggedin').show();
