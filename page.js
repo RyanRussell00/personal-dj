@@ -1,5 +1,3 @@
-// const { parse } = require("querystring");
-
 (function () {
 
     /**
@@ -34,12 +32,9 @@
         }
         isValidLogin(false);
     } else {
-        console.log(authorized + " " + (authorized == true));
         if (authorized == null) {
             isValidLogin(false);
         } else {
-            // authorized = Boolean(authorized);
-            console.log(authorized + " " + (authorized == 'access_granted'));
             if (authorized == 'access_granted') {
                 isValidLogin(true);
             } else {
@@ -110,6 +105,9 @@
         document.getElementById('rec-button').addEventListener('click', function (e) {
             e.preventDefault();
 
+            origText = this.textContent;
+            loading('rec-button', true);
+
             let seed_artists = trackResult[0].artists[0].id;
             let seed_tracks = selectedTrackId;
 
@@ -124,7 +122,7 @@
             let limit = 'limit';
 
             // Validate the dance, energy, popular, and limit
-            // Using booleans like this because we can check multiple inputs at a time instead of 1 input at a time
+            // Using booleans like this because we can validate multiple inputs at a time instead of 1 input at a time
             danceValid = validateForm(dance);
             energyValid = validateForm(energy);
             popularValid = validateForm(popular);
@@ -167,12 +165,17 @@
                 if (showErrorIfExists(data)) {
                     recList_id = displayRecommendations(data.trackResult);
                 }
+                loading('rec-button', false, origText);
             });
         }, false);
 
         // listener for create playlist button
         document.getElementById('playlist-button').addEventListener('click', function (e) {
             e.preventDefault();
+
+            origText = this.textContent;
+            loading('playlist-button', true);
+
             let dance = document.getElementById('danceability').value;
             let energy = document.getElementById('energy').value;
 
@@ -191,11 +194,36 @@
                 }
             }).done(function (data) {
                 showErrorIfExists(data);
+                if (data && data.data != null) {
+                    $.ajax({
+                        url: '/addTracks',
+                        data: {
+                            'track_list': recList_id,
+                            'playlist_id': data.data
+                        }
+                    }).done(function (data) {
+                        showErrorIfExists(data);
+                        loading('playlist-button', false, origText);
+                    });
+                }
             });
-
         }, false);
     }
 })();
+
+function loading(id, status, origText = "I am button hear me roar") {
+
+    var x = document.getElementById(id);
+
+    // Start loading
+    if (status == true) {
+        x.textContent = "Loading...";
+        x.disabled = true;
+    } else {
+        x.textContent = origText;
+        x.disabled = false;
+    }
+}
 
 // Selects a track for seeding
 function selectTrack(track_id) {

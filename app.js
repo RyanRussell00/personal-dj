@@ -361,7 +361,12 @@ app.get('/createPlaylist', function (req, res) {
         }
     })
         .then(response => {
-            addTracksToPlaylist(response.data.id, track_list);
+            res.json({
+                'status': 201,
+                'message': 'Successfully created new playlist',
+                'data': response.data.id
+            });
+            // addTracksToPlaylist(response.data.id, track_list);
         })
         .catch(error => {
             console.log("Playlist could not be created: " + error);
@@ -385,11 +390,14 @@ app.get('/createPlaylist', function (req, res) {
 });
 
 // Add a list of tracks by id to a playlist by id
-async function addTracksToPlaylist(playlistId, track_list) {
+app.get('/addTracks', function (req, res) {
 
     if (isTokenTimedOutOrInvalid()) {
         refreshToken();
     }
+
+    let track_list = req.query.track_list;
+    let playlistId = req.query.playlist_id;
 
     if (!playlistId || !track_list || track_list.length < 1) {
         return;
@@ -411,33 +419,89 @@ async function addTracksToPlaylist(playlistId, track_list) {
         }
     })
         .then(response => {
-            return {
+            res.json({
                 'status': response.status,
                 'message': 'success'
-            };
+            });
         })
         .catch(error => {
             console.log("Failed to add songs to playlist: " + error);
             if (error.response.status === 401) {
-                return {
+                res.json({
                     'status': error.response.data,
                     'message': 'Token time out please log in again',
                     'trackResult': null
-                };
+                });
             } else if (error.response.status === 429) {
-                return {
+                res.json({
                     'status': error.response.data,
                     'message': 'Too many requests. Please try again in a few minutes.',
                     'trackResult': null
-                };
+                });
             } else {
-                return {
+                res.json({
                     'status': error.response.data,
                     'message': 'Something went wrong, no idea what happened. You\'re on your own!',
                     'trackResult': null
-                };
+                });
             }
         });
-}
+})
+
+// Add a list of tracks by id to a playlist by id
+// async function addTracksToPlaylist(playlistId, track_list) {
+
+//     if (isTokenTimedOutOrInvalid()) {
+//         refreshToken();
+//     }
+
+//     if (!playlistId || !track_list || track_list.length < 1) {
+//         return;
+//     }
+
+//     let url = 'https://api.spotify.com/v1/playlists/' + playlistId + '/tracks';
+
+//     const body = {
+//         "uris": track_list
+//     };
+
+//     ax({
+//         method: "post",
+//         url: url,
+//         data: body,
+//         headers: {
+//             "Content-Type": "application/json",
+//             Authorization: getBearerAuthHeader()
+//         }
+//     })
+//         .then(response => {
+//             return {
+//                 'status': response.status,
+//                 'message': 'success'
+//             };
+//         })
+//         .catch(error => {
+//             console.log("Failed to add songs to playlist: " + error);
+//             if (error.response.status === 401) {
+//                 return {
+//                     'status': error.response.data,
+//                     'message': 'Token time out please log in again',
+//                     'trackResult': null
+//                 };
+//             } else if (error.response.status === 429) {
+//                 return {
+//                     'status': error.response.data,
+//                     'message': 'Too many requests. Please try again in a few minutes.',
+//                     'trackResult': null
+//                 };
+//             } else {
+//                 return {
+//                     'status': error.response.data,
+//                     'message': 'Something went wrong, no idea what happened. You\'re on your own!',
+//                     'trackResult': null
+//                 };
+//             }
+//         });
+// }
 
 app.listen(_port);
