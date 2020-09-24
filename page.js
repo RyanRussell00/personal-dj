@@ -105,9 +105,6 @@
         document.getElementById('rec-button').addEventListener('click', function (e) {
             e.preventDefault();
 
-            origText = this.textContent;
-            loading('rec-button', true);
-
             let seed_artists = trackResult[0].artists[0].id;
             let seed_tracks = selectedTrackId;
 
@@ -150,6 +147,9 @@
             // change energy and hype to decimal values
             dance = parseFloat(dance / 10);
             energy = parseFloat(energy / 10);
+
+            origText = this.textContent;
+            loading('rec-button', true);
 
             $.ajax({
                 url: '/recommendations',
