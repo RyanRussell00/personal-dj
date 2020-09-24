@@ -21,12 +21,16 @@ var _token_timeout;
 var _user_id = "";
 const track_search_limit = 5;
 
+// Constants
+const MSG_ACCESS_DENIED = "Access was denied. Please try logging in again.";
+const MSG_TOKEN_TIMEOUT = "For security reasons your session expires after a period of inactivity. Please log in again. Thank you!";
+
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
  * @return {string} The generated string
  */
-const generateRandomString = function(length) {
+const generateRandomString = function (length) {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -44,7 +48,7 @@ app.use(express.static(__dirname))
     .use(cors())
     .use(cookieParser());
 
-app.get('/login', function(req, res) {
+app.get('/login', function (req, res) {
     let state = generateRandomString(16);
     res.cookie(stateKey, state);
 
@@ -60,7 +64,7 @@ app.get('/login', function(req, res) {
         }));
 });
 
-app.get('/callback', function(req, res) {
+app.get('/callback', function (req, res) {
 
     let code = req.query.code || null;
     let state = req.query.state || null;
@@ -83,13 +87,13 @@ app.get('/callback', function(req, res) {
         };
 
         ax({
-                method: "post",
-                url: "https://accounts.spotify.com/api/token",
-                params,
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded" //WARNING: This may cause errors
-                }
-            })
+            method: "post",
+            url: "https://accounts.spotify.com/api/token",
+            params,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded" //WARNING: This may cause errors
+            }
+        })
             .then(response => {
                 _access_token = response.data.access_token;
                 _refresh_token = response.data.refresh_token;
@@ -97,30 +101,32 @@ app.get('/callback', function(req, res) {
                 date.setHours(date.getHours() + ((response.data.expires_in || 0) / 3600));
                 _token_timeout = date.toISOString();
                 ax({
-                        method: "get",
-                        url: "https://api.spotify.com/v1/me",
-                        headers: { Authorization: "Bearer " + _access_token }
-                    })
+                    method: "get",
+                    url: "https://api.spotify.com/v1/me",
+                    headers: { Authorization: "Bearer " + _access_token }
+                })
                     .then(response => {
                         _user_id = response.data.id;
                         res.redirect("/#" + querystring.stringify({ authorized: true })); // Do not pass access token or refresh token in header
                     })
                     .catch(error => {
                         console.log("Failed to load user account: " + error);
-                        res.send({
-                            statusCode: "400",
-                            message: "Failed to load user information. Please try again.",
-                            error: error.response.data
-                        })
+                        res.redirect("/#" + querystring.stringify({ authorized: false }));
+                        // res.send({
+                        //     statusCode: "400",
+                        //     message: "Failed to load user information. Please try again.",
+                        //     error: error.response.data
+                        // })
                     });
             })
             .catch(error => {
                 console.log("Failed to login: " + error);
-                res.send({
-                    statusCode: "401",
-                    message: "Failed to login. Please try again.",
-                    error: error
-                });
+                res.redirect("/#" + querystring.stringify({ authorized: false }));
+                // res.send({
+                //     'status': '401',
+                //     'message': MSG_ACCESS_DENIED,
+                //     'trackResult': null
+                // });
             });
     }
 });
@@ -133,22 +139,28 @@ function getBearerAuthHeader() {
     return 'Bearer ' + _access_token;
 }
 
-// Return true if the token has timed out
-function isTokenTimedOut() {
+// Return true if the token has timed out or token is null
+function isTokenTimedOutOrInvalid() {
     if (!_token_timeout) {
         return true;
     }
     return !new Date().toISOString >= _token_timeout;
 }
 
-// Refreshes the access token
-async function refreshToken() {
+// Refreshes the access token.
+// Return true if success, false otherwise
+function refreshToken() {
+
+    // If token is still valid, return true
+    if (!isTokenTimedOutOrInvalid()) {
+        // console.log("REFRESH REROUTE");
+        return true;
+    }
+
+    // missing refresh token, need to log in again
     if (!_refresh_token || _refresh_token == '') {
-        console.log("REFRESH FAILED");
-        return {
-            status: false,
-            message: "REFRESH FAILED: Refresh token invalid. Please log in again."
-        };
+        // console.log("REFRESH FAILED");
+        return false;
     }
 
     const params = {
@@ -159,55 +171,51 @@ async function refreshToken() {
     };
 
     ax({
-            method: "post",
-            url: "https://accounts.spotify.com/api/token",
-            params,
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded" // WARNING: This may cause errors
-            }
-        })
+        method: "post",
+        url: "https://accounts.spotify.com/api/token",
+        params,
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded" // WARNING: This may cause errors
+        }
+    })
         .then(response => {
             _access_token = response.data.access_token;
-            return {
-                status: true,
-                message: "REFRESH SUCCESS"
-            };
+            return true;
         })
         .catch(error => {
             console.log("REFRESH FAILED! " + error);
-            return {
-                status: false,
-                message: "REFRESH FAILED: " + error
-            };
+            return false;
         });
 }
 
 // Search for a list of tracks given a search query
-app.get('/trackSearch', function(req, res) {
+app.get('/trackSearch', function (req, res) {
 
-    if (isTokenTimedOut()) {
-        refreshToken();
+    // If refresh fails, redirect to login
+    if (!refreshToken()) {
+        res.send({
+            'status': '401',
+            'message': MSG_TOKEN_TIMEOUT,
+            'trackResult': null
+        });
+        return;
     }
-
-    // replace spaces with %20
-    var query = req.query.track_value;
-
 
     let url = 'https://api.spotify.com/v1/search?' +
         querystring.stringify({
             limit: track_search_limit,
-            q: query,
+            q: req.query.track_value,
             offset: req.query.searchOffset,
             type: 'track'
         });
 
     ax({
-            method: "get",
-            url: url,
-            headers: {
-                Authorization: getBearerAuthHeader()
-            }
-        })
+        method: "get",
+        url: url,
+        headers: {
+            Authorization: getBearerAuthHeader()
+        }
+    })
         .then(response => {
             if (response.data.tracks.total > 0) {
                 res.json({
@@ -225,7 +233,6 @@ app.get('/trackSearch', function(req, res) {
         .catch(error => {
             console.log("Track Search Failed: " + error);
             if (error.response.status === 401) {
-
                 res.json({
                     'status': error.response.data,
                     'message': 'Token time out please log in again',
@@ -248,10 +255,17 @@ app.get('/trackSearch', function(req, res) {
 });
 
 // Generate up to 50 recommended songs given params 
-app.get('/recommendations', function(req, res) {
+app.get('/recommendations', function (req, res) {
 
-    if (isTokenTimedOut()) {
-        refreshToken();
+    // If refresh fails, redirect to login
+    if (!refreshToken()) {
+        console.log("Trying to reroute to login");
+        res.send({
+            'status': '401',
+            'message': MSG_TOKEN_TIMEOUT,
+            'trackResult': null
+        });
+        return;
     }
 
     let url = 'https://api.spotify.com/v1/recommendations?' +
@@ -265,12 +279,12 @@ app.get('/recommendations', function(req, res) {
         });
 
     ax({
-            method: "get",
-            url: url,
-            headers: {
-                Authorization: getBearerAuthHeader()
-            }
-        })
+        method: "get",
+        url: url,
+        headers: {
+            Authorization: getBearerAuthHeader()
+        }
+    })
         .then(response => {
             res.json({
                 'status': response.status,
@@ -303,10 +317,17 @@ app.get('/recommendations', function(req, res) {
 });
 
 // Creates a playlist, then calls function to add songs to playlist
-app.get('/createPlaylist', function(req, res) {
+app.get('/createPlaylist', function (req, res) {
 
-    if (isTokenTimedOut()) {
-        refreshToken();
+    // If refresh fails, redirect to login
+    if (!refreshToken()) {
+        console.log("Trying to reroute to login");
+        res.send({
+            'status': '401',
+            'message': MSG_TOKEN_TIMEOUT,
+            'trackResult': null
+        });
+        return;
     }
 
     let track_list = req.query.track_list;
@@ -342,14 +363,14 @@ app.get('/createPlaylist', function(req, res) {
     };
 
     ax({
-            method: "post",
-            url: url,
-            data: body,
-            headers: {
-                "Authorization": getBearerAuthHeader(),
-                "Content-Type": "application/json"
-            }
-        })
+        method: "post",
+        url: url,
+        data: body,
+        headers: {
+            "Authorization": getBearerAuthHeader(),
+            "Content-Type": "application/json"
+        }
+    })
         .then(response => {
             addTracksToPlaylist(response.data.id, track_list);
         })
@@ -377,7 +398,7 @@ app.get('/createPlaylist', function(req, res) {
 // Add a list of tracks by id to a playlist by id
 async function addTracksToPlaylist(playlistId, track_list) {
 
-    if (isTokenTimedOut()) {
+    if (isTokenTimedOutOrInvalid()) {
         refreshToken();
     }
 
@@ -392,14 +413,14 @@ async function addTracksToPlaylist(playlistId, track_list) {
     };
 
     ax({
-            method: "post",
-            url: url,
-            data: body,
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: getBearerAuthHeader()
-            }
-        })
+        method: "post",
+        url: url,
+        data: body,
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: getBearerAuthHeader()
+        }
+    })
         .then(response => {
             return {
                 'status': response.status,
