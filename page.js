@@ -33,18 +33,9 @@
         if (error.status === 429) {
             msg += params.Retry - After;
         }
-        alert('There was an error: ' + error);
+        isValidLogin(false);
     } else {
-        if (authorized) {
-
-            $('#login').hide();
-            $('#loggedin').show();
-
-        } else {
-            // render initial screen
-            $('#login').show();
-            $('#loggedin').hide();
-        }
+        isValidLogin(true);
 
         // listener for track search button
         document.getElementById('search-track').addEventListener('click', function(e) {
@@ -116,7 +107,6 @@
             if (!seed_tracks || seed_tracks == "" || !seed_artists || seed_artists == "") {
                 alert("Please select a track first.");
             }
-
            
             let dance = 'danceability';
             let energy = 'energy';
@@ -136,22 +126,16 @@
 
             dance = document.getElementById('danceability').value;
             energy = document.getElementById('energy').value;
-            popular = document.getElementById('popular').value;
+            popular = parseInt(document.getElementById('popular').value);
             limit = parseInt(document.getElementById('limit').value);
 
-            // remove any trailing % sign if needed
-            dance = dance.replace('%$', '');
-            energy = energy.replace('%$', '');
-            popular = popular.replace('%$', '');
-
-            popular = parseInt(popular);
-
+            // Check for invalid inputs
             if (!limit || !Number.isInteger(limit) || limit < 1 || limit > 50 ||
                 !seed_artists || seed_artists.length < 1 ||
                 !seed_tracks || seed_tracks.length < 1 ||
                 !dance || dance < 0 || dance > 10 ||
                 !energy || energy < 0 || energy > 10 ||
-                !popular || !Number.isInteger(popular) || popular < 0 || popular > 100) {
+                !popular || !Number.isInteger(popular) || popular < 1 || popular > 100) {
                 return;
             }
 
@@ -196,9 +180,7 @@
                     'dance': dance
                 }
             }).done(function(data) {
-                if (!showErrorIfExists(data)) {
-                    alert("Failed to create playlist :(");
-                }
+                showErrorIfExists(data);
             });
 
         }, false);
@@ -243,17 +225,34 @@ function validateForm(in_form_id) {
 // Checks if error exists and shows error message. True = NO error, False = Error
 function showErrorIfExists(data) {
     var error;
-    if (data.status.error == null) {
+    if (data && data.status.error == null) {
         error = data.status;
     } else {
-        error = data.status.error.status;
+        error = data.status.error.status || '401';
     }
     var msg = data.message;
+    // if unauthorized we need to prompt log in
+    if (error && parseInt(error) == 401) {
+        alert(msg);
+        isValidLogin(false);
+        return false;
+    }
     if (error && error >= 400) {
         alert(msg || "Error: Please try logging in and out again.");
         return false;
     }
     return true;
+}
+
+function isValidLogin(valid) {
+    
+    if (valid == true) {
+        $('#login').hide();
+        $('#loggedin').show();
+    } else {
+        $('#login').show();
+        $('#loggedin').hide();
+    }
 }
 
 // generates search results
