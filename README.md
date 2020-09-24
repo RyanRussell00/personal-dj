@@ -13,6 +13,7 @@ Create playlists directly to your Spotify account with fine tuned preferences su
 
 ## Contributors
 - [Ryan Russell](https://github.com/RyanRussell00)
+- [Jake Capra](https://github.com/JakeCapra)
 
 <br>Please add yourself as a contributor with your first PR
 
