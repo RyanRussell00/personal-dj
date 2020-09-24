@@ -35,7 +35,6 @@
         }
         isValidLogin(false);
     } else {
-        console.log(authorized);
         isValidLogin(true);
 
         // listener for track search button

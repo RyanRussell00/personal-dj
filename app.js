@@ -112,21 +112,11 @@ app.get('/callback', function (req, res) {
                     .catch(error => {
                         console.log("Failed to load user account: " + error);
                         res.redirect("/#" + querystring.stringify({ authorized: false }));
-                        // res.send({
-                        //     statusCode: "400",
-                        //     message: "Failed to load user information. Please try again.",
-                        //     error: error.response.data
-                        // })
                     });
             })
             .catch(error => {
                 console.log("Failed to login: " + error);
                 res.redirect("/#" + querystring.stringify({ authorized: false }));
-                // res.send({
-                //     'status': '401',
-                //     'message': MSG_ACCESS_DENIED,
-                //     'trackResult': null
-                // });
             });
     }
 });
@@ -259,7 +249,6 @@ app.get('/recommendations', function (req, res) {
 
     // If refresh fails, redirect to login
     if (!refreshToken()) {
-        console.log("Trying to reroute to login");
         res.send({
             'status': '401',
             'message': MSG_TOKEN_TIMEOUT,
