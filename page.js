@@ -343,7 +343,6 @@ function displayRecommendations(in_rec_list) {
                 </div>
             </a>
         </div>
-        <br>
         `
     }
     document.getElementById('playlist-button').style.display = "block";

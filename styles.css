@@ -6,6 +6,11 @@
     display: none;
 }
 
+html, body {
+    background-color: #212121;
+    color: #1db954;
+}
+
 .selected-track {
     box-shadow: 0 0 0.8rem 0.1rem rgba(0, 128, 0, 0.5) !important;
     transform: scale(1.1);
@@ -46,4 +51,22 @@
 
 .spotify-black-border {
     border-color: #191414;
+}
+.card {
+    background-color: #1DB954;
+    color: white;
+}
+#rec-results {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+}
+@media only screen and (min-width: 800px) {
+    .col-sm-3{
+        display: inline-block;
+        text-align: center;
+        padding-bottom: .6vw;
+    }
 }
