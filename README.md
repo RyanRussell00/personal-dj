@@ -6,8 +6,14 @@ Create playlists directly to your Spotify account with fine tuned preferences su
 - How popular you want each track 
 <br>
 
+## Want to contribute?
+1. Start by reading the [GETTING-STARTED.md](https://github.com/RyanRussell00/personal-dj/blob/master/GETTING-STARTED.md) file
+2. Look at the issues and select an issue. Try starting with a smaller issue (marked with "good first issue") to get a feel for the code-base.
+3. Branch from master (or fork) and do your code, then open a pull request and respond to any reviews.
+
 ## Contributors
 - [Ryan Russell](https://github.com/RyanRussell00)
+
 <br>Please add yourself as a contributor with your first PR
 
 ## Credits
