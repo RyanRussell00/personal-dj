@@ -173,9 +173,6 @@
         document.getElementById('playlist-button').addEventListener('click', function (e) {
             e.preventDefault();
 
-            origText = this.textContent;
-            loading('playlist-button', true);
-
             let dance = document.getElementById('danceability').value;
             let energy = document.getElementById('energy').value;
 
@@ -184,6 +181,10 @@
                 !energy || energy < 0 || energy > 10) {
                 return;
             }
+
+            origText = this.textContent;
+            loading('playlist-button', true);
+            
             $.ajax({
                 url: '/createPlaylist',
                 data: {
