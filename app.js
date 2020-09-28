@@ -8,7 +8,7 @@ const compression = require('compression');
 
 // production stuff
 var _port = 8888;
-var _redirect_uri = 'http://localhost:8888/callback/'
+var _redirect_uri = 'http://localhost:' + _port + '/callback/'
 if (process.env.NODE_ENV == 'production') {
     _port = process.env.PORT;
     _redirect_uri = process.env.SPOTIFY_CALL_BACK_URI;
@@ -46,6 +46,7 @@ app.use(express.static(__dirname))
 
 app.get('/login', function(req, res) {
     let state = generateRandomString(16);
+    res.clearCookie(stateKey);
     res.cookie(stateKey, state);
 
     let scope = 'playlist-modify-public playlist-modify-private';

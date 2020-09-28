@@ -31,9 +31,11 @@ const token_id = 'personal-dj-token';
     recList_id = [];
 
     if (error) {
+        msg = error;
         if (error.status === 429) {
             msg += params.Retry - After;
         }
+        alert(msg);
         isValidLogin(false);
         window.history.replaceState({}, document.title, "/"); // remove from header to help reduce accidental shares of token
     } else {
