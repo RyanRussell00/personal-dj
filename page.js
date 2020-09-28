@@ -1,4 +1,7 @@
-(function () {
+//Constants
+const token_id = 'personal-dj-token';
+
+(function() {
 
     /**
      * Obtains parameters from the hash of the URL
@@ -16,8 +19,9 @@
 
     var params = getHashParams();
 
-    var error = params.error || null,
-        authorized = params.authorized || false;
+    var error = params.error || null;
+    authorized = params.authorized || false;
+    token = params.token || sessionStorage.getItem(token_id) || null;
     trackResult = [];
     user_id = "";
     searchOffset = 0;
@@ -31,19 +35,22 @@
             msg += params.Retry - After;
         }
         isValidLogin(false);
+        window.history.replaceState({}, document.title, "/"); // remove from header to help reduce accidental shares of token
     } else {
-        if (authorized == null) {
+        if (authorized == null || token == null) {
             isValidLogin(false);
         } else {
-            if (authorized == 'access_granted') {
+            if (authorized == 'access_granted' || token != null) {
                 isValidLogin(true);
+                sessionStorage.setItem(token_id, token);
             } else {
                 isValidLogin(false);
             }
         }
+        window.history.replaceState({}, document.title, "/"); // remove from header to help reduce accidental shares of token
 
         // listener for track search button
-        document.getElementById('search-track').addEventListener('click', function (e) {
+        document.getElementById('search-track').addEventListener('click', function(e) {
             e.preventDefault();
             validateForm('track-id');
             let track_id_element = document.getElementById('track-id');
@@ -54,7 +61,7 @@
         }, false);
 
         // listener for search results backwards pagination
-        document.getElementById('search-last').addEventListener('click', function (e) {
+        document.getElementById('search-last').addEventListener('click', function(e) {
             e.preventDefault();
             validateForm('track-id');
             let track_id_element = document.getElementById('track-id');
@@ -70,7 +77,7 @@
         }, false);
 
         // listener for search results forwards pagination
-        document.getElementById('search-next').addEventListener('click', function (e) {
+        document.getElementById('search-next').addEventListener('click', function(e) {
             e.preventDefault();
             validateForm('track-id');
             let track_id_element = document.getElementById('track-id');
@@ -91,10 +98,11 @@
                 url: '/trackSearch',
                 data: {
                     'track_value': track_name,
-                    'searchOffset': offset
+                    'searchOffset': offset,
+                    'token': sessionStorage.getItem(token_id)
                 }
-            }).done(function (data) {
-                if (showErrorIfExists(data)) {
+            }).done(function(data) {
+                if (responseIsSuccess(data)) {
                     trackResult = data.trackResult.tracks.items;
                     displaySearchResults(trackResult);
                 }
@@ -102,7 +110,7 @@
         }
 
         // listener for recommendations button
-        document.getElementById('rec-button').addEventListener('click', function (e) {
+        document.getElementById('rec-button').addEventListener('click', function(e) {
             e.preventDefault();
 
             let seed_artists = trackResult[0].artists[0].id;
@@ -160,9 +168,10 @@
                     'danceability': dance,
                     'energy': energy,
                     'popular': popular,
+                    'token': sessionStorage.getItem(token_id)
                 }
-            }).done(function (data) {
-                if (showErrorIfExists(data)) {
+            }).done(function(data) {
+                if (responseIsSuccess(data)) {
                     recList_id = displayRecommendations(data.trackResult);
                 }
                 loading('rec-button', false, origText);
@@ -170,7 +179,7 @@
         }, false);
 
         // listener for create playlist button
-        document.getElementById('playlist-button').addEventListener('click', function (e) {
+        document.getElementById('playlist-button').addEventListener('click', function(e) {
             e.preventDefault();
 
             let dance = document.getElementById('danceability').value;
@@ -184,26 +193,28 @@
 
             origText = this.textContent;
             loading('playlist-button', true);
-            
+
             $.ajax({
                 url: '/createPlaylist',
                 data: {
                     'track_list': recList_id,
                     'seed_song': selectedTrackName,
                     'energy': energy,
-                    'dance': dance
+                    'dance': dance,
+                    'token': sessionStorage.getItem(token_id)
                 }
-            }).done(function (data) {
-                showErrorIfExists(data);
-                if (data && data.data != null) {
+            }).done(function(data) {
+                // If successfuly created playlist, add tracks
+                if (responseIsSuccess(data) && data && data.data != null) {
                     $.ajax({
                         url: '/addTracks',
                         data: {
                             'track_list': recList_id,
-                            'playlist_id': data.data
+                            'playlist_id': data.data,
+                            'token': sessionStorage.getItem(token_id)
                         }
-                    }).done(function (data) {
-                        showErrorIfExists(data);
+                    }).done(function(data) {
+                        responseIsSuccess(data);
                         loading('playlist-button', false, origText);
                     });
                 }
@@ -212,6 +223,7 @@
     }
 })();
 
+// Change text content of id to "loading" or back to original text
 function loading(id, status, origText = "I am button hear me roar") {
 
     var x = document.getElementById(id);
@@ -262,7 +274,7 @@ function validateForm(in_form_id) {
 }
 
 // Checks if error exists and shows error message. True = NO error, False = Error
-function showErrorIfExists(data) {
+function responseIsSuccess(data) {
     var error;
     if (data && data.status.error == null) {
         error = data.status;
@@ -289,6 +301,7 @@ function isValidLogin(valid) {
         $('#login').hide();
         $('#loggedin').show();
     } else {
+        sessionStorage.removeItem(token_id);
         $('#login').show();
         $('#loggedin').hide();
     }

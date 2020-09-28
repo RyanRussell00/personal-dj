@@ -6,7 +6,8 @@
     display: none;
 }
 
-html, body {
+html,
+body {
     background-color: #212121;
     color: #1db954;
 }
@@ -52,10 +53,12 @@ html, body {
 .spotify-black-border {
     border-color: #191414;
 }
+
 .card {
     background-color: #1DB954;
     color: white;
 }
+
 #rec-results {
     display: inline-block;
     width: 100%;
@@ -63,8 +66,9 @@ html, body {
     margin: 0 auto;
     text-align: center;
 }
+
 @media only screen and (min-width: 800px) {
-    .col-sm-3{
+    .col-sm-3 {
         display: inline-block;
         text-align: center;
         padding-bottom: .6vw;

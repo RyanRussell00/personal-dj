@@ -3,34 +3,28 @@ const ax = require('axios');
 const cors = require('cors');
 const querystring = require('querystring');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const compression = require('compression');
 
 // production stuff
-const _port = process.env.PORT || 8888;
+var _port = 8888;
 var _redirect_uri = 'http://localhost:8888/callback/'
 if (process.env.NODE_ENV == 'production') {
+    _port = process.env.PORT;
     _redirect_uri = process.env.SPOTIFY_CALL_BACK_URI;
 }
 
-var _client_id = process.env.NODE_SPOTIFY_CLIENT_ID || null;
-var _client_secret = process.env.NODE_SPOTIFY_CLIENT_SECRET || null;
+const _client_id = process.env.NODE_SPOTIFY_CLIENT_ID || null;
+const _client_secret = process.env.NODE_SPOTIFY_CLIENT_SECRET || null;
 
-var _access_token;
-var _refresh_token;
-var _token_timeout;
-
-var _user_id = "";
 const track_search_limit = 5;
-
-// Constants
-const MSG_ACCESS_DENIED = "Access was denied. Please try logging in again.";
-const MSG_TOKEN_TIMEOUT = "For security reasons your session expires after a period of inactivity. Please log in again. Thank you!";
 
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
  * @return {string} The generated string
  */
-const generateRandomString = function (length) {
+const generateRandomString = function(length) {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -45,10 +39,12 @@ const stateKey = 'spotify_auth_state';
 const app = express();
 
 app.use(express.static(__dirname))
+    .use(helmet())
+    .use(compression())
     .use(cors())
     .use(cookieParser());
 
-app.get('/login', function (req, res) {
+app.get('/login', function(req, res) {
     let state = generateRandomString(16);
     res.cookie(stateKey, state);
 
@@ -64,7 +60,7 @@ app.get('/login', function (req, res) {
         }));
 });
 
-app.get('/callback', function (req, res) {
+app.get('/callback', function(req, res) {
 
     let code = req.query.code || null;
     let state = req.query.state || null;
@@ -87,32 +83,16 @@ app.get('/callback', function (req, res) {
         };
 
         ax({
-            method: "post",
-            url: "https://accounts.spotify.com/api/token",
-            params,
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded" //WARNING: This may cause errors
-            }
-        })
+                method: "post",
+                url: "https://accounts.spotify.com/api/token",
+                params,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
             .then(response => {
-                _access_token = response.data.access_token;
-                _refresh_token = response.data.refresh_token;
-                let date = new Date();
-                date.setHours(date.getHours() + ((response.data.expires_in || 0) / 3600));
-                _token_timeout = date.toISOString();
-                ax({
-                    method: "get",
-                    url: "https://api.spotify.com/v1/me",
-                    headers: { Authorization: "Bearer " + _access_token }
-                })
-                    .then(response => {
-                        _user_id = response.data.id;
-                        res.redirect("/#" + querystring.stringify({ authorized: 'access_granted' })); // Do not pass access token or refresh token in header
-                    })
-                    .catch(error => {
-                        console.log("Failed to load user account: " + error);
-                        res.redirect("/#" + querystring.stringify({ authorized: 'account_failure' }));
-                    });
+                let token = response.data.access_token;
+                res.redirect("/#" + querystring.stringify({ authorized: 'access_granted', 'token': token }));
             })
             .catch(error => {
                 console.log("Failed to login: " + error);
@@ -122,74 +102,15 @@ app.get('/callback', function (req, res) {
 });
 
 // Return the string used as a Bearer token
-function getBearerAuthHeader() {
-    if (!_access_token) {
+function getBearerAuthHeader(token) {
+    if (!token) {
         return '';
     }
-    return 'Bearer ' + _access_token;
-}
-
-// Return true if the token has timed out or token is null
-function isTokenTimedOutOrInvalid() {
-    if (!_token_timeout) {
-        return true;
-    }
-    return !new Date().toISOString >= _token_timeout;
-}
-
-// Refreshes the access token.
-// Return true if success, false otherwise
-function refreshToken() {
-
-    // If token is still valid, return true
-    if (!isTokenTimedOutOrInvalid()) {
-        // console.log("REFRESH REROUTE");
-        return true;
-    }
-
-    // missing refresh token, need to log in again
-    if (!_refresh_token || _refresh_token == '') {
-        // console.log("REFRESH FAILED");
-        return false;
-    }
-
-    const params = {
-        client_id: _client_id,
-        client_secret: _client_secret,
-        grant_type: "refresh_token",
-        refresh_token: _refresh_token
-    };
-
-    ax({
-        method: "post",
-        url: "https://accounts.spotify.com/api/token",
-        params,
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded" // WARNING: This may cause errors
-        }
-    })
-        .then(response => {
-            _access_token = response.data.access_token;
-            return true;
-        })
-        .catch(error => {
-            console.log("REFRESH FAILED! " + error);
-            return false;
-        });
+    return 'Bearer ' + token;
 }
 
 // Search for a list of tracks given a search query
-app.get('/trackSearch', function (req, res) {
-
-    // If refresh fails, redirect to login
-    if (!refreshToken()) {
-        res.send({
-            'status': '401',
-            'message': MSG_TOKEN_TIMEOUT,
-            'trackResult': null
-        });
-        return;
-    }
+app.get('/trackSearch', function(req, res) {
 
     let url = 'https://api.spotify.com/v1/search?' +
         querystring.stringify({
@@ -200,12 +121,12 @@ app.get('/trackSearch', function (req, res) {
         });
 
     ax({
-        method: "get",
-        url: url,
-        headers: {
-            Authorization: getBearerAuthHeader()
-        }
-    })
+            method: "get",
+            url: url,
+            headers: {
+                Authorization: getBearerAuthHeader(req.query.token)
+            }
+        })
         .then(response => {
             if (response.data.tracks.total > 0) {
                 res.json({
@@ -221,41 +142,12 @@ app.get('/trackSearch', function (req, res) {
             }
         })
         .catch(error => {
-            console.log("Track Search Failed: " + error);
-            if (error.response.status === 401) {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Token time out please log in again',
-                    'trackResult': null
-                });
-            } else if (error.response.status === 429) {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Too many requests. Please try again in a few minutes.',
-                    'trackResult': null
-                });
-            } else {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Something went wrong and it was definitely your fault because this site is flawless. You could try refreshing the site but this error usually signals something much deeper.',
-                    'trackResult': null
-                })
-            }
+            res.send(handleError(error));
         });
 });
 
 // Generate up to 50 recommended songs given params 
-app.get('/recommendations', function (req, res) {
-
-    // If refresh fails, redirect to login
-    if (!refreshToken()) {
-        res.send({
-            'status': '401',
-            'message': MSG_TOKEN_TIMEOUT,
-            'trackResult': null
-        });
-        return;
-    }
+app.get('/recommendations', function(req, res) {
 
     let url = 'https://api.spotify.com/v1/recommendations?' +
         querystring.stringify({
@@ -268,12 +160,12 @@ app.get('/recommendations', function (req, res) {
         });
 
     ax({
-        method: "get",
-        url: url,
-        headers: {
-            Authorization: getBearerAuthHeader()
-        }
-    })
+            method: "get",
+            url: url,
+            headers: {
+                Authorization: getBearerAuthHeader(req.query.token)
+            }
+        })
         .then(response => {
             res.json({
                 'status': response.status,
@@ -283,54 +175,15 @@ app.get('/recommendations', function (req, res) {
         })
         .catch(error => {
             console.log("Recommendations Failed: " + error);
-            if (error.response.status === 401) {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Token time out please log in again',
-                    'trackResult': null
-                });
-            } else if (error.response.status === 429) {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Too many requests. Please try again in a few minutes.',
-                    'trackResult': null
-                });
-            } else {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Something went wrong, no idea what happened. You\'re on your own!',
-                    'trackResult': null
-                });
-            }
+            res.send(handleError(error));
         });
 });
 
 // Creates a playlist, then calls function to add songs to playlist
-app.get('/createPlaylist', function (req, res) {
-
-    // If refresh fails, redirect to login
-    if (!refreshToken()) {
-        console.log("Trying to reroute to login");
-        res.send({
-            'status': '401',
-            'message': MSG_TOKEN_TIMEOUT,
-            'trackResult': null
-        });
-        return;
-    }
-
-    let track_list = req.query.track_list;
-
+app.get('/createPlaylist', function(req, res) {
     let seed_song = req.query.seed_song;
     let dance = req.query.dance;
     let energy = req.query.energy;
-
-
-    if (!_user_id || _user_id.length < 1 || !track_list || track_list.length < 1) {
-        return;
-    }
-
-    let url = 'https://api.spotify.com/v1/users/' + _user_id + '/playlists';
 
     let date = new Date();
     let dateStr = +date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
@@ -346,55 +199,52 @@ app.get('/createPlaylist', function (req, res) {
         desc = "Custom playlist created by your Personal DJ! Go to https://personal-dj-app.herokuapp.com/ to make your Personal DJ now!";
     }
 
-    const body = {
-        "name": name,
-        "description": desc
-    };
-
+    // get user profile information
     ax({
-        method: "post",
-        url: url,
-        data: body,
-        headers: {
-            "Authorization": getBearerAuthHeader(),
-            "Content-Type": "application/json"
-        }
-    })
+            method: "get",
+            url: "https://api.spotify.com/v1/me",
+            headers: { Authorization: getBearerAuthHeader(req.query.token) }
+        })
         .then(response => {
-            res.json({
-                'status': 201,
-                'message': 'Successfully created new playlist',
-                'data': response.data.id
-            });
-            // addTracksToPlaylist(response.data.id, track_list);
+            // on success get id and create playlist
+            let id = response.data.id;
+
+            let url = 'https://api.spotify.com/v1/users/' + id + '/playlists';
+
+            const body = {
+                "name": name,
+                "description": desc
+            };
+
+            ax({
+                    method: "post",
+                    url: url,
+                    data: body,
+                    headers: {
+                        "Authorization": getBearerAuthHeader(req.query.token),
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => {
+                    res.json({
+                        'status': 201,
+                        'message': 'Successfully created new playlist',
+                        'data': response.data.id
+                    });
+                })
+                .catch(error => {
+                    res.send(handleError(error));
+                });
+
         })
         .catch(error => {
-            console.log("Playlist could not be created: " + error);
-            if (error.response.status === 401) {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Token time out please log in again'
-                });
-            } else if (error.response.status === 429) {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Too many requests. Please try again in a few minutes.'
-                });
-            } else {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Something went wrong, no idea what happened. You\'re on your own!',
-                })
-            }
+            console.log("Failed to load user account: " + error);
+            res.redirect("/#" + querystring.stringify({ authorized: 'account_failure', 'error': error }));
         });
 });
 
 // Add a list of tracks by id to a playlist by id
-app.get('/addTracks', function (req, res) {
-
-    if (isTokenTimedOutOrInvalid()) {
-        refreshToken();
-    }
+app.get('/addTracks', function(req, res) {
 
     let track_list = req.query.track_list;
     let playlistId = req.query.playlist_id;
@@ -410,14 +260,14 @@ app.get('/addTracks', function (req, res) {
     };
 
     ax({
-        method: "post",
-        url: url,
-        data: body,
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: getBearerAuthHeader()
-        }
-    })
+            method: "post",
+            url: url,
+            data: body,
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: getBearerAuthHeader(req.query.token)
+            }
+        })
         .then(response => {
             res.json({
                 'status': response.status,
@@ -425,83 +275,32 @@ app.get('/addTracks', function (req, res) {
             });
         })
         .catch(error => {
-            console.log("Failed to add songs to playlist: " + error);
-            if (error.response.status === 401) {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Token time out please log in again',
-                    'trackResult': null
-                });
-            } else if (error.response.status === 429) {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Too many requests. Please try again in a few minutes.',
-                    'trackResult': null
-                });
-            } else {
-                res.json({
-                    'status': error.response.data,
-                    'message': 'Something went wrong, no idea what happened. You\'re on your own!',
-                    'trackResult': null
-                });
-            }
+            res.send(handleError(error));
         });
 })
 
-// Add a list of tracks by id to a playlist by id
-// async function addTracksToPlaylist(playlistId, track_list) {
-
-//     if (isTokenTimedOutOrInvalid()) {
-//         refreshToken();
-//     }
-
-//     if (!playlistId || !track_list || track_list.length < 1) {
-//         return;
-//     }
-
-//     let url = 'https://api.spotify.com/v1/playlists/' + playlistId + '/tracks';
-
-//     const body = {
-//         "uris": track_list
-//     };
-
-//     ax({
-//         method: "post",
-//         url: url,
-//         data: body,
-//         headers: {
-//             "Content-Type": "application/json",
-//             Authorization: getBearerAuthHeader()
-//         }
-//     })
-//         .then(response => {
-//             return {
-//                 'status': response.status,
-//                 'message': 'success'
-//             };
-//         })
-//         .catch(error => {
-//             console.log("Failed to add songs to playlist: " + error);
-//             if (error.response.status === 401) {
-//                 return {
-//                     'status': error.response.data,
-//                     'message': 'Token time out please log in again',
-//                     'trackResult': null
-//                 };
-//             } else if (error.response.status === 429) {
-//                 return {
-//                     'status': error.response.data,
-//                     'message': 'Too many requests. Please try again in a few minutes.',
-//                     'trackResult': null
-//                 };
-//             } else {
-//                 return {
-//                     'status': error.response.data,
-//                     'message': 'Something went wrong, no idea what happened. You\'re on your own!',
-//                     'trackResult': null
-//                 };
-//             }
-//         });
-// }
+// Handles the error object and returns a JSON message
+function handleError(error) {
+    // console.log(error);
+    if (error.response.status === 401) {
+        return {
+            'status': error.response.status,
+            'message': 'Token time out please log in again',
+            'trackResult': null
+        };
+    } else if (error.response.status === 429) {
+        return {
+            'status': error.response.status,
+            'message': 'Too many requests. Please try again in a few minutes.',
+            'trackResult': null
+        };
+    } else {
+        return {
+            'status': error.response.status,
+            'message': 'Something went wrong, no idea what happened. You\'re on your own!',
+            'trackResult': null
+        };
+    }
+}
 
 app.listen(_port);

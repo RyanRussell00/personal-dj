@@ -10,11 +10,14 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-178827338-1"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
 
-      gtag('config', 'UA-178827338-1');
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-178827338-1');
     </script>
 
 
@@ -85,7 +88,7 @@
                     <div id="step-2">
                         <div class="form-group">
                             <h5 id="danceHelp"><b>Step 2:</b> Fine tune your recommendations</h5>
-                            
+
                             <label for="danceability">How <i>danceable</i> do you want the recommendations? (0 to 10)</label>
                             <div class="input-group">
                                 <input type="number" min="0" max="10" step="1" id="danceability" class="form-control col-sm-2" required>
