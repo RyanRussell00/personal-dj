@@ -12,6 +12,10 @@ body {
     color: #1db954;
 }
 
+.selected-track::before {
+    content: "Selected";
+}
+
 .selected-track {
     box-shadow: 0 0 0.8rem 0.1rem green !important;
     transform: scale(1.1);
