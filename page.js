@@ -343,7 +343,7 @@ function displaySearchResults(in_val) {
         let trackId = in_val[i].id || null;
         container.innerHTML +=
             `
-        <div class="col-sm-2">
+        <div class="col-lg col-sm-6">
             <div class="card shadow track my-2" name="${trackName} "id="${trackId}" onclick="selectTrack('${trackId}')">
                 <img class="card-img-top" src="${imgUrl}">
                 <p class="card-title py-2">${trackName} <br> <i>by ${artistName}</i></p>
