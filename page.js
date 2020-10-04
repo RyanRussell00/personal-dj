@@ -30,6 +30,8 @@ const token_id = 'personal-dj-token';
 
     recList_id = [];
 
+    recList_cache = {};
+
     if (error) {
         msg = error;
         if (error.status === 429) {
@@ -174,6 +176,11 @@ const token_id = 'personal-dj-token';
                 }
             }).done(function(data) {
                 if (responseIsSuccess(data)) {
+
+                    console.log(data.trackResult);
+
+                    recList_cache = data.trackResult;
+                    
                     recList_id = displayRecommendations(data.trackResult);
                 }
                 loading('rec-button', false, origText);
@@ -222,6 +229,16 @@ const token_id = 'personal-dj-token';
                 }
             });
         }, false);
+    
+        // listener for explicitness button
+
+        document.getElementById('explicit-button').addEventListener('click', function(e) {
+            
+            var ischecked = e.target.checked;
+
+            recList_id = displayRecommendations(recList_cache, ischecked);
+
+        })
     }
 })();
 
@@ -364,7 +381,7 @@ function displaySearchResults(in_val) {
     </div>
     </div>
 */
-function displayRecommendations(in_rec_list) {
+function displayRecommendations(in_rec_list, filter_flag = false) {
     clearResults();
     // error where data is null
     if (!in_rec_list) {
@@ -381,24 +398,34 @@ function displayRecommendations(in_rec_list) {
 
     // parent div that holds list
     var results = document.getElementById('rec-results');
-    for (i = 0; i < in_rec_list.tracks.length; i++) {
+    results.innerHTML = '';
 
-        // update list of ids of tracks to later add to playlist
-        recList.push(in_rec_list.tracks[i].uri);
-        var curr = in_rec_list['tracks'][i];
-        results.innerHTML +=
+    for (i = 0; i < in_rec_list.tracks.length; i++) {
+        // skip the song only if filter_flag is true and the song is explicit
+
+        if (! (filter_flag && in_rec_list.tracks[i].explicit)) {
+
+            // update list of ids of tracks to later add to playlist
+            recList.push(in_rec_list.tracks[i].uri);
+            var curr = in_rec_list['tracks'][i];
+
+            results.innerHTML +=
+                `
+            <div class="col-sm-3">
+                <a href="${curr.external_urls.spotify}" target="_blank" style="text-decoration: none;">
+                    <div class="card my-1 text-center">
+                        <img class="card-img-top" src="${curr.album.images[0].url}">
+                        <p class="card-title py-2">${curr.name} <br> <i>by ${curr.artists[0].name}</i></p>
+                    </div>
+                </a>
+            </div>
             `
-        <div class="col-sm-3">
-            <a href="${curr.external_urls.spotify}" target="_blank" style="text-decoration: none;">
-                <div class="card my-1 text-center">
-                    <img class="card-img-top" src="${curr.album.images[0].url}">
-                    <p class="card-title py-2">${curr.name} <br> <i>by ${curr.artists[0].name}</i></p>
-                </div>
-            </a>
-        </div>
-        `
+        }
+        
     }
     document.getElementById('playlist-button').style.display = "block";
+    document.getElementById('exp-filter').style.display = "block";
+
     return recList;
 
 }
