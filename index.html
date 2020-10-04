@@ -111,6 +111,16 @@
                         <div class="form-group">
                             <h5 id="danceHelp"><b>Step 2:</b> Fine tune your recommendations</h5>
 
+                            <label for="acousticness">How <i>acoustic</i> do you want the recommendations? (0 to 10)</label>
+                            <div class="input-group">
+                                <input type="number" min="0" max="10" step="1" id="acousticness" class="form-control col-sm-2" required>
+                                <div class="invalid-feedback">
+                                    Value must not be empty and between 0 and 10
+                                </div>
+                            </div>
+                            <small class="form-text text-muted">0 = No speech, only music,  10 = high speechiness </small>
+                            <br>
+
                             <label for="danceability">How <i>danceable</i> do you want the recommendations? (0 to 10)</label>
                             <div class="input-group">
                                 <input type="number" min="0" max="10" step="1" id="danceability" class="form-control col-sm-2" required>

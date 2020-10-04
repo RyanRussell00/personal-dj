@@ -124,6 +124,7 @@ const token_id = 'personal-dj-token';
             }
 
             let dance = 'danceability';
+            let acoustic = 'acousticness';
             let energy = 'energy';
             let popular = 'popular';
             let limit = 'limit';
@@ -131,15 +132,17 @@ const token_id = 'personal-dj-token';
             // Validate the dance, energy, popular, and limit
             // Using booleans like this because we can validate multiple inputs at a time instead of 1 input at a time
             danceValid = validateForm(dance);
+            acousticValid = validateForm(acoustic);
             energyValid = validateForm(energy);
             popularValid = validateForm(popular);
             limitValid = validateForm(limit);
 
-            if (!danceValid || !energyValid || !popularValid || !limitValid) {
+            if (!acousticValid || !danceValid || !energyValid || !popularValid || !limitValid) {
                 return;
             }
 
             dance = document.getElementById('danceability').value;
+            acoustic = document.getElementById('acousticness').value;
             energy = document.getElementById('energy').value;
             popular = parseInt(document.getElementById('popular').value);
             limit = parseInt(document.getElementById('limit').value);
@@ -149,6 +152,7 @@ const token_id = 'personal-dj-token';
                 !seed_artists || seed_artists.length < 1 ||
                 !seed_tracks || seed_tracks.length < 1 ||
                 !dance || dance < 0 || dance > 10 ||
+                !acoustic || acoustic < 0 || acoustic > 10 ||
                 !energy || energy < 0 || energy > 10 ||
                 !popular || !Number.isInteger(popular) || popular < 1 || popular > 100) {
                 return;
@@ -156,6 +160,7 @@ const token_id = 'personal-dj-token';
 
             // change energy and hype to decimal values
             dance = parseFloat(dance / 10);
+            acoustic = parseFloat(acoustic / 10);
             energy = parseFloat(energy / 10);
 
             origText = this.textContent;
@@ -168,6 +173,7 @@ const token_id = 'personal-dj-token';
                     'seed_artists': seed_artists,
                     'seed_tracks': seed_tracks,
                     'danceability': dance,
+                    'acousticness': acoustic,
                     'energy': energy,
                     'popular': popular,
                     'token': sessionStorage.getItem(token_id)
@@ -184,11 +190,13 @@ const token_id = 'personal-dj-token';
         document.getElementById('playlist-button').addEventListener('click', function(e) {
             e.preventDefault();
 
+            let acoustic = document.getElementById('acousticness').value;
             let dance = document.getElementById('danceability').value;
             let energy = document.getElementById('energy').value;
 
             if (!recList_id || recList_id.length < 1 ||
                 !dance || dance < 0 || dance > 10 ||
+                !acoustic || acoustic < 0 || acoustic > 10 ||
                 !energy || energy < 0 || energy > 10) {
                 return;
             }
@@ -203,6 +211,7 @@ const token_id = 'personal-dj-token';
                     'seed_song': selectedTrackName,
                     'energy': energy,
                     'dance': dance,
+                    'acoustic': acoustic,
                     'token': sessionStorage.getItem(token_id)
                 }
             }).done(function(data) {
