@@ -148,6 +148,72 @@
                                     Value must not be empty and between 0 and 50
                                 </div>
                             </div>
+                            <br>
+
+                            <input type="checkbox" id="show-optional-inputs" name="optional-inputs" onchange="showOptionalInputs(this)">
+                            <label for="optional-inputs">Do you want to fine-tune with more inputs?</label>
+                            <br>
+
+                            <div id="additional-options">
+                                <label for="acousticness">How acoustic the track should be?</label>
+                                <div class="input-group">
+                                    <input type="number" min="0" max="10" step="1" id="acousticness" class="form-control col-sm-2">
+                                    <div class="invalid-feedback">
+                                        Value must be between 0 and 10
+                                    </div>
+                                </div>
+                                <br>
+
+                                <label for="speechiness">Should the recommended tracks contain vocals?</label>
+                                <div class="input-group">
+                                    <input type="number" min="0" max="10" step="1" id="speechiness" class="form-control col-sm-2">
+                                    <div class="invalid-feedback">
+                                        Value must be between 0 and 10
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">
+                                    < 3 = represent music and other non-speech-like tracks;
+                                    > 3 and < 6 = contain both music and speech such as rap music;
+                                    > 6 = talk-show, audio-book, poetry
+                                </small>
+                                <br>
+
+                                <label for="instrumentalness">Should the recommended tracks contains spoken words?</label>
+                                <div class="input-group">
+                                    <input type="number" min="0" max="10" step="1" id="instrumentalness" class="form-control col-sm-2">
+                                    <div class="invalid-feedback">
+                                        Value must be between 0 and 10
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">
+                                    < 5 = vocal tracks;
+                                    > 5 = instrumental tracks
+                                </small>
+                                <br>
+
+                                <label for="tempo">How much should be the speed of the track?</label>
+                                <div class="input-group">
+                                    <input type="number" min="0" max="10" step="1" id="tempo" class="form-control col-sm-2">
+                                    <div class="invalid-feedback">
+                                        Value must be between 0 and 10
+                                    </div>
+                                </div>
+                                <br>
+
+                                <label for="valence">How positive the track should be?</label>
+                                <div class="input-group">
+                                    <input type="number" min="0" max="10" step="1" id="valence" class="form-control col-sm-2">
+                                    <div class="invalid-feedback">
+                                        Value must be between 0 and 10
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">
+                                    0 = negative (sad, depressed, angry);
+                                    10 = positive (happy, cheerful, euphoric)
+                                </small>
+                                <br>
+                            </div>
+
                         </div>
                         <button class="btn btn-success text-white" id="rec-button">Get Recommendations</button>
                         <br>

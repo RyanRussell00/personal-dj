@@ -127,6 +127,11 @@ const token_id = 'personal-dj-token';
             let energy = 'energy';
             let popular = 'popular';
             let limit = 'limit';
+            let acoustic = 'acousticness';
+            let speech = 'speechiness';
+            let instrumental = 'instrumentalness';
+            let tempo = 'tempo';
+            let valence = 'valence';
 
             // Validate the dance, energy, popular, and limit
             // Using booleans like this because we can validate multiple inputs at a time instead of 1 input at a time
@@ -134,15 +139,25 @@ const token_id = 'personal-dj-token';
             energyValid = validateForm(energy);
             popularValid = validateForm(popular);
             limitValid = validateForm(limit);
+            acousticValid = validateForm(acoustic);
+            speechValid = validateForm(speech);
+            instrumentalValid = validateForm(instrumental);
+            tempoValid = validateForm(tempo);
+            valenceValid = validateForm(valence);
 
-            if (!danceValid || !energyValid || !popularValid || !limitValid) {
+            if (!danceValid || !energyValid || !popularValid || !limitValid || !acousticValid || !speechValid || !instrumentalValid || !tempoValid || !valenceValid) {
                 return;
             }
 
-            dance = document.getElementById('danceability').value;
-            energy = document.getElementById('energy').value;
-            popular = parseInt(document.getElementById('popular').value);
-            limit = parseInt(document.getElementById('limit').value);
+            dance = document.getElementById(dance).value;
+            energy = document.getElementById(energy).value;
+            popular = parseInt(document.getElementById(popular).value);
+            limit = parseInt(document.getElementById(limit).value);
+            acoustic = parseInt(document.getElementById(acoustic).value);
+            speech = parseInt(document.getElementById(speech).value);
+            instrumental = parseInt(document.getElementById(instrumental).value);
+            tempo = parseInt(document.getElementById(tempo).value);
+            valence = parseInt(document.getElementById(valence).value);
 
             // Check for invalid inputs
             if (!limit || !Number.isInteger(limit) || limit < 1 || limit > 50 ||
@@ -150,7 +165,13 @@ const token_id = 'personal-dj-token';
                 !seed_tracks || seed_tracks.length < 1 ||
                 !dance || dance < 0 || dance > 10 ||
                 !energy || energy < 0 || energy > 10 ||
-                !popular || !Number.isInteger(popular) || popular < 1 || popular > 100) {
+                !popular || !Number.isInteger(popular) || popular < 1 || popular > 100 ||
+                acoustic && (acoustic < 0 || acoustic > 10) ||
+                speech && (speech < 0 || speech > 10) ||
+                instrumental && (instrumental < 0 && instrumental > 10) ||
+                tempo && (tempo < 0 || tempo > 10) ||
+                valence && (valence < 0 || valence > 10)
+            ) {
                 return;
             }
 
@@ -161,17 +182,39 @@ const token_id = 'personal-dj-token';
             origText = this.textContent;
             loading('rec-button', true);
 
+            let requestData = {
+                'limit': limit,
+                'seed_artists': seed_artists,
+                'seed_tracks': seed_tracks,
+                'danceability': dance,
+                'energy': energy,
+                'popular': popular,
+                'token': sessionStorage.getItem(token_id)
+            };
+            if(acoustic) {
+                acoustic = parseFloat(acoustic / 10);
+                requestData['acousticness'] = acoustic;
+            }
+            if(speech) {
+                speech = parseFloat(speech / 10);
+                requestData['speechiness'] = speech;
+            }
+            if(instrumental) {
+                instrumental = parseFloat(instrumental / 10);
+                requestData['instrumentalness'] = instrumental;
+            }
+            if(tempo) {
+                tempo = parseFloat(tempo / 10);
+                requestData['tempo'] = tempo;
+            }
+            if(valence) {
+                valence = parseFloat(valence / 10);
+                requestData['valence'] = valence;
+            }
+
             $.ajax({
                 url: '/recommendations',
-                data: {
-                    'limit': limit,
-                    'seed_artists': seed_artists,
-                    'seed_tracks': seed_tracks,
-                    'danceability': dance,
-                    'energy': energy,
-                    'popular': popular,
-                    'token': sessionStorage.getItem(token_id)
-                }
+                data: requestData
             }).done(function(data) {
                 if (responseIsSuccess(data)) {
                     recList_id = displayRecommendations(data.trackResult);
@@ -266,11 +309,14 @@ function selectTrack(track_id) {
 // Validates that a form is not empty and adds necessary valid/invalid classes
 function validateForm(in_form_id) {
     var x = document.getElementById(in_form_id);
-    x.classList.remove('is-invalid');
-    if (!x.value || x.value.length < 1) {
-        x.classList.remove('is-valid');
-        x.classList.add('is-invalid');
-        return false;
+    let checkValidity = x.required;
+    if(checkValidity) {
+        x.classList.remove('is-invalid');
+        if (!x.value || x.value.length < 1) {
+            x.classList.remove('is-valid');
+            x.classList.add('is-invalid');
+            return false;
+        }
     }
     return true;
 }
@@ -407,4 +453,14 @@ function clearResults() {
     document.getElementById('rec-results').innerHTML = "";
     document.getElementById('playlist-button').style.display = "none";
     recList_id = [];
+}
+
+function showOptionalInputs(element) {
+    if(element.id === "show-optional-inputs") {
+        if(element.checked) {
+            document.getElementById("additional-options").style.display = "block";
+        } else {
+            document.getElementById("additional-options").style.display = "none";
+        }
+    }
 }
