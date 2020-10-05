@@ -529,6 +529,13 @@ function displayRecommendations(in_rec_list, filter_flag = false) {
   document.getElementById("playlist-button").style.display = "block";
   document.getElementById("exp-filter").style.display = "block";
 
+  //Show total recommendations
+  totalRecText = "Found " + recList.length;
+  resultsEnding = recList.length == 1 ? " track" : " tracks";
+  totalRecText += resultsEnding;
+  document.getElementById("rec-total").innerHTML = totalRecText;
+  document.getElementById("rec-total").style.display = "block";
+
   return recList;
 }
 
