@@ -3,79 +3,87 @@
 #search-pagination,
 #step-2,
 #playlist-button {
-    display: none;
+  display: none;
 }
 
 html,
 body {
-    background-color: #212121;
-    color: #1db954;
+  background-color: #212121;
+  color: #1db954;
 }
 
 .selected-track::before {
-    content: "Selected";
+  content: "Selected";
 }
 
 .selected-track {
-    box-shadow: 0 0 0.8rem 0.1rem green !important;
-    transform: scale(1.1);
-    z-index: 999;
+  box-shadow: 0 0 0.8rem 0.1rem green !important;
+  transform: scale(1.1);
+  z-index: 999;
 }
 
 .text-overflow {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 500px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 500px;
 }
 
 .login-btn {
-    background-color: #1DB954;
-    border-color: #191414;
+  background-color: #1db954;
+  border-color: #191414;
 }
 
 .login-btn:hover {
-    background-color: white;
-    color: #1DB954;
-    border-color: #1DB954;
+  background-color: white;
+  color: #1db954;
+  border-color: #1db954;
 }
 
 .login-btn:active {
-    background-color: #1DB954 !important;
-    border-color: #191414 !important;
-    color: white !important;
+  background-color: #1db954 !important;
+  border-color: #191414 !important;
+  color: white !important;
 }
 
 .login-btn:focus {
-    box-shadow: 0 0 0 .2rem #1DB954;
+  box-shadow: 0 0 0 0.2rem #1db954;
 }
 
 .spotify-green-bg {
-    background-color: #1DB954;
+  background-color: #1db954;
 }
 
 .spotify-black-border {
-    border-color: #191414;
+  border-color: #191414;
 }
 
 .card {
-    background-color: #1DB954;
-    color: white;
+  background-color: #1db954;
+  color: white;
 }
 
-.card:hover, 
+.card:hover,
 .card:focus {
-    background-color: #218838;
-    border-color: #1e7e34;
-    cursor: pointer;
+  background-color: #218838;
+  border-color: #1e7e34;
+  cursor: pointer;
 }
 
 #rec-results {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+}
+
+@media only screen and (min-width: 800px) {
+  .col-sm-3 {
     display: inline-block;
-    width: 100%;
-    position: relative;
-    margin: 0 auto;
     text-align: center;
+    padding-bottom: 0.6vw;
+  }
 }
 
 #exp-filter {
@@ -88,11 +96,37 @@ body {
         text-align: center;
         padding-bottom: .6vw;
     }
+  
+
+.loader-container {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 @media only screen and (min-width: 575px) and (max-width: 800px) {
-    .col-sm-3 {
-        display: inline-block;
-        max-width: 40%;
-    }
+  .col-sm-3 {
+    display: inline-block;
+    max-width: 40%;
+  }
+}
+
+.loader-container::after {
+  background-image: url(assets/loader.svg);
+  background-size: 40px 40px;
+  height: 20px;
+  width: 30px;
+  content: "";
+  background-position: center left;
+  background-repeat: no-repeat;
+}
+
+body::after {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  z-index: -1;
+  content: url("assets/loader.svg");
 }
