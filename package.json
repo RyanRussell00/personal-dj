@@ -5,7 +5,6 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "nodemon ./app.js",
-    "build": "node app.js",
     "start": "node app.js"
   },
   "dependencies": {
