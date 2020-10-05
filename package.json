@@ -5,7 +5,6 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "nodemon ./app.js",
-    "ui": "browser-sync start --proxy=localhost:8000 --files='**/*.css, **/*.pug, **/*.js' --ignore=node_modules --reload-delay 10 --no-ui --no-notify",
     "start": "node app.js"
   },
   "dependencies": {

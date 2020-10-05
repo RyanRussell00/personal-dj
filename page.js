@@ -429,7 +429,9 @@ function displaySearchResults(in_val) {
     let trackId = in_val[i].id || null;
     container.innerHTML += `
         <div class="col-lg col-sm-6">
-            <div class="card shadow track my-2" name="${fixTrackName(trackName)} "id="${trackId}" onclick="selectTrack('${trackId}')">
+            <div class="card shadow track my-2" name="${fixTrackName(
+              trackName
+            )} "id="${trackId}" onclick="selectTrack('${trackId}')">
                 <img class="card-img-top" src="${imgUrl}">
                 <p class="card-title py-2">${trackName} <br> <i>by ${artistName}</i></p>
             </div>
@@ -439,13 +441,13 @@ function displaySearchResults(in_val) {
 }
 
 // function that fixes a track name that has quotes
-function fixTrackName(inTrackName){
-    let regmatch=/\\([\s\S])|(")/g;
+function fixTrackName(inTrackName) {
+  let regmatch = /\\([\s\S])|(")/g;
 
-    if(inTrackName!="Title Not Found" && inTrackName.match(regmatch)){
-        return inTrackName.replace(regmatch,"&quot;")
-    }
-    return inTrackName
+  if (inTrackName != "Title Not Found" && inTrackName.match(regmatch)) {
+    return inTrackName.replace(regmatch, "&quot;");
+  }
+  return inTrackName;
 }
 
 // generates HTML like such
