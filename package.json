@@ -4,8 +4,13 @@
   "description": "Personal Spotify DJ",
   "version": "0.0.1",
   "scripts": {
+<<<<<<< HEAD
+    "dev": "nodemon ./scripts/app.js",
+    "start": "node ./scripts/app.js"
+=======
     "dev": "nodemon ./app.js",
     "start": "node app.js"
+>>>>>>> origin
   },
   "dependencies": {
     "axios": "^0.20.0",
