@@ -302,6 +302,20 @@ const token_id = "personal-dj-token";
 })();
 
 function addSpinner(el) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   const cls = el.getAttribute("class") || "";
   el.setAttribute("class", cls + " loader-container");
   return function () {
