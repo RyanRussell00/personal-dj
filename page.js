@@ -182,6 +182,9 @@ const token_id = 'personal-dj-token';
                     recList_cache = data.trackResult;
                     
                     recList_id = displayRecommendations(data.trackResult);
+                    
+                    document.getElementById('explicit-button').checked = false;
+
                 }
                 loading('rec-button', false, origText);
             });
@@ -425,6 +428,7 @@ function displayRecommendations(in_rec_list, filter_flag = false) {
     }
     document.getElementById('playlist-button').style.display = "block";
     document.getElementById('exp-filter').style.display = "block";
+    
 
     return recList;
 
