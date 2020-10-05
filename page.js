@@ -311,17 +311,11 @@ function addSpinner(el) {
 
 // Change text content of id to "loading" or back to original text
 function loading(id, status, origText = "I am button hear me roar") {
-
-
-
-
-
-  
   var x = document.getElementById(id);
 
   // Start loading
   if (status == true) {
-                const orig = x.textContent;
+    const orig = x.textContent;
     x.textContent = "Loading...";
     const removeSpinner = addSpinner(x);
     x.disabled = true;
