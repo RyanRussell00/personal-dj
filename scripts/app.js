@@ -14,41 +14,10 @@ if (process.env.NODE_ENV == "production") {
   _redirect_uri = process.env.SPOTIFY_CALL_BACK_URI;
 }
 
-var _client_id = process.env.NODE_SPOTIFY_CLIENT_ID || null;
-var _client_secret = process.env.NODE_SPOTIFY_CLIENT_SECRET || null;
+const _client_id = process.env.NODE_SPOTIFY_CLIENT_ID || null;
+const _client_secret = process.env.NODE_SPOTIFY_CLIENT_SECRET || null;
 const track_search_limit = 5;
 const directoryPath = __dirname + '/../';
-
-/*
-    FOR DEVELOPMENT ENVIRONMENT ONLY!
-    If the environment is not production and the client_id or client_secret is not found in the system variables, it will check the local env variables file. 
-    This is not the best practice but it's a quick way to test in development environments. Better practice is to set actual environmental variables.
-    */
-if (process.env.NODE_ENV != 'production' && (_client_id == null || _client_secret == null)) {
-    console.log("If you're seeing this in production, something went terribly wrong.");
-    // Read from file
-    let fs = require('fs');
-    fs.readFile(directoryPath + 'DEV_ENV_VARS.json', 'utf8', function(err, data) {
-        if (!err) {
-            try {
-                let json = JSON.parse(data);
-                let id = json.NODE_SPOTIFY_CLIENT_ID;
-                let secret = json.NODE_SPOTIFY_CLIENT_SECRET;
-                if (_client_id == null) {
-                    _client_id = id;
-                }
-                if (_client_secret == null) {
-                    _client_secret = secret;
-                }
-            } catch (e) {
-                console.error("Could not parse JSON env variables. Please see master branch and follow the exact format.");
-            }
-        } else {
-            console.error("Could not find file or parse JSON env variables. Please see master branch and follow the exact format.");
-        }
-    });
-}
-
 
 /**
  * Generates a random string containing numbers and letters

@@ -11,24 +11,6 @@ The live version of this app is launched on a Heroku server and only the code ow
 
 4. Keep the Spotify Dashboard open, you'll need it in the next steps.
 
-# 2: Quick and Dirty: Setting up Environmental Variables
-NOTE: This is not best practice and it should NEVER be used in Production. Best practice is to skip this step and do #3, however if you just want to quickly test in the development (local) environment then you may continue down this path at your own risk.
-### DO NOT PUSH THE DEV_ENV_VARS.json file!
-### DO NOT PUSH THE DEV_ENV_VARS.json file!
-<br>
-1. Go to the DEV_ENV_VARS.json file and input your Client ID and Secret that you got from the Spotify dashboard from <a href="#step1">Step 1</a>
-The JSON file should contain only 4 lines and look exactly like this, with your Client ID and Client Secret where in the quotes after the colon:
-<br>
-<code>
-{ <br>
-    "NODE_SPOTIFY_CLIENT_ID": "REPLACE_ME_WITH_YOUR_CLIENT_ID",
-    <br>
-    "NODE_SPOTIFY_CLIENT_SECRET": "REPLACE_ME_WITH_YOUR_CLIENT_SECRET"
-    <br>
-}
-</code>
-
-
 # 2: Best Practice: Setting up Environmental Variables
 <b>NOTE: This tutorial only covers how to do it on Windows or Linux. If you use Mac I wish you the best of luck.</b>
 
