@@ -1,5 +1,5 @@
 # WARNING: Do not remove this or else you risk exposing your Spotify Dashboard Client ID and Client Secret!!
-
+DEV_ENV_VARS.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,linux,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,visualstudiocode,linux,windows
