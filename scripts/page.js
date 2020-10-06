@@ -154,7 +154,7 @@ const token_id = "personal-dj-token";
   document.getElementById("rec-button").addEventListener(
     "click",
     function (e) {
-      console.log('clicked');
+      console.log("clicked");
       e.preventDefault();
 
       let seed_artists = trackResult[0].artists[0].id;
