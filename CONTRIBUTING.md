@@ -60,5 +60,6 @@ Open your terminal in the project directory and execute `npm run dev`.
 - [astriskit](https://github.com/astriskit)
 - [Gareffmz](https://github.com/Gareffmz)
 - [nidhishs](https://github.com/nidhishs)
+- [sonamdh1](https://github.com/sonamdh1)
 
 <br>Please add yourself as a contributor with your first PR
