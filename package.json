@@ -4,9 +4,8 @@
   "description": "Personal Spotify DJ",
   "version": "0.0.1",
   "scripts": {
-    "dev": "nodemon ./app.js",
-    "ui": "browser-sync start --proxy=localhost:8000 --files='**/*.css, **/*.pug, **/*.js' --ignore=node_modules --reload-delay 10 --no-ui --no-notify",
-    "start": "node app.js"
+    "dev": "nodemon ./scripts/app.js",
+    "start": "node ./scripts/app.js"
   },
   "dependencies": {
     "axios": "^0.20.0",
