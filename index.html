@@ -287,6 +287,7 @@
                     Value must not be empty and between 1 and 100
                   </div>
                 </div>
+
                 <small class="form-text text-muted"
                   >0 = Literally never heard before, 100 = Your grandma knows
                   the song cause she heard it on the radio 43 times</small
@@ -319,10 +320,26 @@
               >
                 Save as a Playlist
               </button>
+              <br />
+              <form>
+                <div
+                  class="custom-control custom-checkbox mb-3"
+                  id="exp-filter"
+                >
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="explicit-button"
+                  />
+                  <label class="custom-control-label" for="explicit-button"
+                    >Filter explicit content</label
+                  >
+                </div>
+              </form>
             </div>
           </form>
           <!-- End Form -->
-
+          <div class="lead text-center mb-4" id="rec-total"></div>
           <div id="rec-results"></div>
         </div>
       </section>
