@@ -170,11 +170,11 @@ const token_id = "personal-dj-token";
         let energy = "energy";
         let popular = "popular";
         let limit = "limit";
-        let acoustic = 'acousticness';
-        let speech = 'speechiness';
-        let instrumental = 'instrumentalness';
-        let tempo = 'tempo';
-        let valence = 'valence';
+        let acoustic = "acousticness";
+        let speech = "speechiness";
+        let instrumental = "instrumentalness";
+        let tempo = "tempo";
+        let valence = "valence";
 
         // Validate the dance, energy, popular, and limit
         // Using booleans like this because we can validate multiple inputs at a time instead of 1 input at a time
@@ -188,7 +188,17 @@ const token_id = "personal-dj-token";
         tempoValid = validateForm(tempo);
         valenceValid = validateForm(valence);
 
-        if (!danceValid || !energyValid || !popularValid || !limitValid || !acousticValid || !speechValid || !instrumentalValid || !tempoValid || !valenceValid) {
+        if (
+          !danceValid ||
+          !energyValid ||
+          !popularValid ||
+          !limitValid ||
+          !acousticValid ||
+          !speechValid ||
+          !instrumentalValid ||
+          !tempoValid ||
+          !valenceValid
+        ) {
           return;
         }
 
@@ -203,17 +213,30 @@ const token_id = "personal-dj-token";
         valence = parseInt(document.getElementById(valence).value);
 
         // Check for invalid inputs
-        if (!limit || !Number.isInteger(limit) || limit < 1 || limit > 50 ||
-          !seed_artists || seed_artists.length < 1 ||
-          !seed_tracks || seed_tracks.length < 1 ||
-          !dance || dance < 0 || dance > 10 ||
-          !energy || energy < 0 || energy > 10 ||
-          !popular || !Number.isInteger(popular) || popular < 1 || popular > 100 ||
-          acoustic && (acoustic < 0 || acoustic > 10) ||
-          speech && (speech < 0 || speech > 10) ||
-          instrumental && (instrumental < 0 && instrumental > 10) ||
-          tempo && (tempo < 0 || tempo > 10) ||
-          valence && (valence < 0 || valence > 10)
+        if (
+          !limit ||
+          !Number.isInteger(limit) ||
+          limit < 1 ||
+          limit > 50 ||
+          !seed_artists ||
+          seed_artists.length < 1 ||
+          !seed_tracks ||
+          seed_tracks.length < 1 ||
+          !dance ||
+          dance < 0 ||
+          dance > 10 ||
+          !energy ||
+          energy < 0 ||
+          energy > 10 ||
+          !popular ||
+          !Number.isInteger(popular) ||
+          popular < 1 ||
+          popular > 100 ||
+          (acoustic && (acoustic < 0 || acoustic > 10)) ||
+          (speech && (speech < 0 || speech > 10)) ||
+          (instrumental && instrumental < 0 && instrumental > 10) ||
+          (tempo && (tempo < 0 || tempo > 10)) ||
+          (valence && (valence < 0 || valence > 10))
         ) {
           return;
         }
@@ -228,33 +251,33 @@ const token_id = "personal-dj-token";
         );
 
         let requestData = {
-          'limit': limit,
-          'seed_artists': seed_artists,
-          'seed_tracks': seed_tracks,
-          'danceability': dance,
-          'energy': energy,
-          'popular': popular,
-          'token': sessionStorage.getItem(token_id)
+          limit: limit,
+          seed_artists: seed_artists,
+          seed_tracks: seed_tracks,
+          danceability: dance,
+          energy: energy,
+          popular: popular,
+          token: sessionStorage.getItem(token_id),
         };
-        if(acoustic) {
+        if (acoustic) {
           acoustic = parseFloat(acoustic / 10);
-          requestData['acousticness'] = acoustic;
+          requestData["acousticness"] = acoustic;
         }
-        if(speech) {
+        if (speech) {
           speech = parseFloat(speech / 10);
-          requestData['speechiness'] = speech;
+          requestData["speechiness"] = speech;
         }
-        if(instrumental) {
+        if (instrumental) {
           instrumental = parseFloat(instrumental / 10);
-          requestData['instrumentalness'] = instrumental;
+          requestData["instrumentalness"] = instrumental;
         }
-        if(tempo) {
+        if (tempo) {
           tempo = parseFloat(tempo / 10);
-          requestData['tempo'] = tempo;
+          requestData["tempo"] = tempo;
         }
-        if(valence) {
+        if (valence) {
           valence = parseFloat(valence / 10);
-          requestData['valence'] = valence;
+          requestData["valence"] = valence;
         }
 
         $.ajax({
@@ -381,11 +404,11 @@ function selectTrack(track_id) {
 function validateForm(in_form_id) {
   var x = document.getElementById(in_form_id);
   let checkValidity = x.required;
-  if(checkValidity) {
-    x.classList.remove('is-invalid');
+  if (checkValidity) {
+    x.classList.remove("is-invalid");
     if (!x.value || x.value.length < 1) {
-      x.classList.remove('is-valid');
-      x.classList.add('is-invalid');
+      x.classList.remove("is-valid");
+      x.classList.add("is-invalid");
       return false;
     }
   }
@@ -535,11 +558,11 @@ function clearResults() {
 }
 
 function showOptionalInputs(element) {
-  if(element.id === "show-optional-inputs") {
-    if(element.checked) {
-        document.getElementById("additional-options").style.display = "block";
+  if (element.id === "show-optional-inputs") {
+    if (element.checked) {
+      document.getElementById("additional-options").style.display = "block";
     } else {
-        document.getElementById("additional-options").style.display = "none";
+      document.getElementById("additional-options").style.display = "none";
     }
   }
 }
