@@ -11,7 +11,7 @@ The live version of this app is launched on a Heroku server and only the code ow
 
 4. Keep the Spotify Dashboard open, you'll need it in the next steps.
 
-# 2: Best Practice: Setting up Environmental Variables
+# 2: Setting up Environmental Variables
 <b>NOTE: This tutorial only covers how to do it on Windows or Linux. If you use Mac I wish you the best of luck.</b>
 
 ## Windows Env Variables
@@ -53,13 +53,3 @@ For the environmental variables to take effect you'll need to restart your IDE, 
 
 Open your terminal in the project directory and execute `npm run dev`.
 <br> If there are no issues you should be in business! Happy coding :)
-
-# Contributors
-- [Ryan Russell](https://github.com/RyanRussell00) (Code Owner)
-- [Jake Capra](https://github.com/JakeCapra)
-- [astriskit](https://github.com/astriskit)
-- [Gareffmz](https://github.com/Gareffmz)
-- [nidhishs](https://github.com/nidhishs)
-- [sonamdh1](https://github.com/sonamdh1)
-
-<br>Please add yourself as a contributor with your first PR
