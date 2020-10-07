@@ -174,7 +174,8 @@
             <div class="col-sm-12 my-5">
               <h4><span class="text-muted">[OPTIONAL]</span> Do you want to fine-tune with more inputs?</h4>
               <div class="">
-                <button type="button" class="btn btn-success mx-1" onclick="showOptionalInputs(true)">Yes plz gimme control</button>
+                <button type="button" class="btn btn-success mx-1" onclick="showOptionalInputs(true)">Yes plz gimme
+                  control</button>
                 <button type="button" class="btn btn-warning mx-1" onclick="showOptionalInputs(false)">nah</button>
               </div>
             </div>
@@ -182,8 +183,8 @@
             <div id="additional-options">
               <h4>All the inputs below are OPTIONAL. Read the text below the input for a description of what they do.
               </h4>
-              <label for="acousticness"><span class="text-muted">[OPTIONAL]</span>How acoustic do
-                you want the track?</label>
+              <label for="acousticness"><span class="text-muted">[OPTIONAL]</span> How acoustic do
+                you want the track? (0 to 10)</label>
               <div class="input-group">
                 <input type="number" min="0" max="10" step="1" id="acousticness" class="form-control col-sm-2">
                 <div class="invalid-feedback">
@@ -196,8 +197,8 @@
               </small>
               <br />
 
-              <label for="speechiness"><span class="text-muted">[OPTIONAL]</span>How vocal do you want the
-                tracks?</label>
+              <label for="speechiness"><span class="text-muted">[OPTIONAL]</span> How vocal do you want the
+                tracks? (0 to 10)</label>
               <div class="input-group">
                 <input type="number" min="0" max="10" step="1" id="speechiness" class="form-control col-sm-2">
                 <div class="invalid-feedback">
@@ -211,8 +212,8 @@
               </small>
               <br />
 
-              <label for="instrumentalness"><span class="text-muted">[OPTIONAL]</span>How instrumental do you want the
-                tracks?</label>
+              <label for="instrumentalness"><span class="text-muted">[OPTIONAL]</span> How instrumental do you want the
+                tracks? (0 to 10)</label>
               <div class="input-group">
                 <input type="number" min="0" max="10" step="1" id="instrumentalness" class="form-control col-sm-2">
                 <div class="invalid-feedback">
@@ -225,8 +226,8 @@
               </small>
               <br>
 
-              <label for="tempo"><span class="text-muted">[OPTIONAL]</span>What BPM (beats per minute) do you
-                want?</label>
+              <label for="tempo"><span class="text-muted">[OPTIONAL]</span> What BPM (beats per minute) do you
+                want? (0 to 1000)</label>
               <div class="input-group">
                 <input type="number" min="0" max="1000" step="1" id="tempo" class="form-control col-sm-2">
                 <div class="invalid-feedback">
@@ -238,8 +239,8 @@
               </small>
               <br>
 
-              <label for="valence"><span class="text-muted">[OPTIONAL]</span>How much musical positiveness should the
-                tracks be?</label>
+              <label for="valence"><span class="text-muted">[OPTIONAL]</span> How much musical positiveness should the
+                tracks have? (0 to 10)</label>
               <div class="input-group">
                 <input type="number" min="0" max="10" step="1" id="valence" class="form-control col-sm-2">
                 <div class="invalid-feedback">
@@ -251,7 +252,8 @@
                 10 = Positive (happy, cheerful, euphoric)
               </small>
               <br>
-              <button type="button" class="btn btn-warning mx-1 mb-4" onclick="showOptionalInputs(false)">Cancel Optional Inputs</button>
+              <button type="button" class="btn btn-warning mx-1 mb-4" onclick="showOptionalInputs(false)">Cancel
+                Optional Inputs</button>
               <hr>
             </div>
           </div>
