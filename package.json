@@ -2,7 +2,7 @@
   "author": "Ryan Russell",
   "name": "personal-dj",
   "description": "Personal Spotify DJ",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "dev": "nodemon ./scripts/app.js",
     "start": "node ./scripts/app.js"
