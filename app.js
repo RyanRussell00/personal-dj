@@ -149,7 +149,7 @@ app.get('/trackSearch', function(req, res) {
 
 // Generate up to 50 recommended songs given params 
 app.get('/recommendations', function(req, res) {
-
+    console.log("bruv");
     let requestData = {
         limit: req.query.limit,
         seed_artists: req.query.seed_artists,
@@ -158,6 +158,7 @@ app.get('/recommendations', function(req, res) {
         target_danceability: req.query.danceability,
         min_popularity: req.query.popular
     };
+    console.log("API: " + req.query.acousticness);
     if(req.query.acousticness) {
         requestData['target_acousticness'] = req.query.acousticness;
     }
@@ -175,6 +176,7 @@ app.get('/recommendations', function(req, res) {
     }
 
     let url = 'https://api.spotify.com/v1/recommendations?' + querystring.stringify(requestData);
+    console.log(querystring.stringify(requestData));
 
     ax({
             method: "get",

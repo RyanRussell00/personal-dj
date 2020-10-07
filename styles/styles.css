@@ -131,6 +131,6 @@ body::after {
   content: url("../assets/loader.svg");
 }
 
-#additional-options {
+#additional-options{
   display: none;
 }

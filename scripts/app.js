@@ -213,29 +213,16 @@ app.get("/recommendations", function (req, res) {
 // Creates a playlist, then calls function to add songs to playlist
 app.get("/createPlaylist", function (req, res) {
   let seed_song = req.query.seed_song;
-  let dance = req.query.dance;
-  let energy = req.query.energy;
 
   let date = new Date();
   let dateStr =
     +date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 
-  let name = seed_song + " : Personally Tailored For You!";
-  let desc =
-    "Custom playlist made with " +
-    dance +
-    " danceability, " +
-    energy +
-    " energy, and seeded from: " +
-    seed_song +
-    ". Go to https://personal-dj-app.herokuapp.com/ to make your Personal DJ now!";
+  let name = seed_song + " : Personally DJ'd For You!";
+  let desc = "Go to https://personal-dj-app.herokuapp.com to make your Personal Playlist now!";
 
   if (!seed_song) {
-    name = "Personal DJ Playlist " + dateStr;
-  }
-  if (!dance || !energy) {
-    desc =
-      "Custom playlist created by your Personal DJ! Go to https://personal-dj-app.herokuapp.com/ to make your Personal DJ now!";
+    name = "Personal DJ Playlist!";
   }
 
   // get user profile information

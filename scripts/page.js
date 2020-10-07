@@ -59,7 +59,7 @@ const token_id = "personal-dj-token";
     "click",
     function (e) {
       e.preventDefault();
-      validateForm("track-id");
+      validateForm("track-id", "", null);
       let track_id_element = document.getElementById("track-id");
       if (!track_id_element.value || track_id_element.value.length < 1) {
         return;
@@ -81,7 +81,7 @@ const token_id = "personal-dj-token";
     "click",
     function (e) {
       e.preventDefault();
-      validateForm("track-id");
+      validateForm("track-id", "", null);
       let track_id_element = document.getElementById("track-id");
       if (!track_id_element.value || track_id_element.value.length < 1) {
         return;
@@ -108,7 +108,7 @@ const token_id = "personal-dj-token";
     "click",
     function (e) {
       e.preventDefault();
-      validateForm("track-id");
+      validateForm("track-id", "", null);
       let track_id_element = document.getElementById("track-id");
       if (!track_id_element.value || track_id_element.value.length < 1) {
         return;
@@ -156,6 +156,8 @@ const token_id = "personal-dj-token";
     function (e) {
       e.preventDefault();
 
+      // Handle mandatory inputs
+
       let seed_artists = trackResult[0].artists[0].id;
       let seed_tracks = selectedTrackId;
 
@@ -167,12 +169,15 @@ const token_id = "personal-dj-token";
         seed_artists == ""
       ) {
         alert("Please select a track first.");
+        return;
       }
 
+      // required inputs
       let dance = "danceability";
       let energy = "energy";
       let popular = "popular";
       let limit = "limit";
+      // optional inputs
       let acoustic = "acousticness";
       let speech = "speechiness";
       let instrumental = "instrumentalness";
@@ -181,53 +186,49 @@ const token_id = "personal-dj-token";
 
       // Validate the dance, energy, popular, and limit
       // Using booleans like this because we can validate multiple inputs at a time instead of 1 input at a time
-      danceValid = validateForm(dance);
-      energyValid = validateForm(energy);
-      popularValid = validateForm(popular);
-      limitValid = validateForm(limit);
-      acousticValid = validateForm(acoustic);
-      speechValid = validateForm(speech);
-      instrumentalValid = validateForm(instrumental);
-      tempoValid = validateForm(tempo);
-      valenceValid = validateForm(valence);
+      danceValid = validateForm(dance, 0, 10);
+      energyValid = validateForm(energy, 0, 10);
+      popularValid = validateForm(popular, 0, 100);
+      limitValid = validateForm(limit, 0, 50);
 
       dance = document.getElementById(dance).value;
       energy = document.getElementById(energy).value;
       popular = parseInt(document.getElementById(popular).value);
       limit = parseInt(document.getElementById(limit).value);
-      acoustic = parseInt(document.getElementById(acoustic).value);
-      speech = parseInt(document.getElementById(speech).value);
-      instrumental = parseInt(document.getElementById(instrumental).value);
-      tempo = parseInt(document.getElementById(tempo).value);
-      valence = parseInt(document.getElementById(valence).value);
 
-      // Check for invalid inputs
+      // Check for invalid required inputs
       if (
-        !limit ||
-        !Number.isInteger(limit) ||
-        limit < 1 ||
-        limit > 50 ||
-        !seed_artists ||
-        seed_artists.length < 1 ||
-        !seed_tracks ||
-        seed_tracks.length < 1 ||
-        !dance ||
-        dance < 0 ||
-        dance > 10 ||
-        !energy ||
-        energy < 0 ||
-        energy > 10 ||
-        !popular ||
-        !Number.isInteger(popular) ||
-        popular < 1 ||
-        popular > 100 ||
-        (acoustic && (acoustic < 0 || acoustic > 10)) ||
-        (speech && (speech < 0 || speech > 10)) ||
-        (instrumental && instrumental < 0 && instrumental > 10) ||
-        (tempo && (tempo < 0 || tempo > 10)) ||
-        (valence && (valence < 0 || valence > 10))
+        !danceValid ||
+        isNaN(dance) ||
+        !energyValid ||
+        isNaN(energy) ||
+        !popularValid ||
+        isNaN(popular) ||
+        !limitValid ||
+        isNaN(limit)
       ) {
+        clearResults();
         return;
+      }
+
+      // Set to valid if the optional inputs are visible and it passes validation function
+      var optionalInputsActive =
+        document.getElementById("additional-options") &&
+        document.getElementById("additional-options").style.display != "" &&
+        document.getElementById("additional-options").style.display != "none";
+
+      var acousticValid = false;
+      var speechValid = false;
+      var instrumentalValid = false;
+      var tempoValid = false;
+      valenceValid = false;
+      // Set the inputs if they are valid
+      if (optionalInputsActive) {
+        acousticValid = validateForm(acoustic, 0, 10);
+        speechValid = validateForm(speech, 0, 10);
+        instrumentalValid = validateForm(instrumental, 0, 10);
+        tempoValid = validateForm(tempo, 0, 1000);
+        valenceValid = validateForm(valence, 0, 10);
       }
 
       // change energy and hype to decimal values
@@ -248,23 +249,30 @@ const token_id = "personal-dj-token";
         popular: popular,
         token: sessionStorage.getItem(token_id),
       };
-      if (acoustic) {
+
+      // Only get optional inputs if they passed validation and are real numbers
+      acoustic = parseInt(document.getElementById(acoustic).value);
+      speech = parseInt(document.getElementById(speech).value);
+      instrumental = parseInt(document.getElementById(instrumental).value);
+      tempo = parseInt(document.getElementById(tempo).value);
+      valence = parseInt(document.getElementById(valence).value);
+
+      if (acousticValid && !isNaN(acoustic)) {
         acoustic = parseFloat(acoustic / 10);
         requestData["acousticness"] = acoustic;
       }
-      if (speech) {
+      if (speechValid && !isNaN(speech)) {
         speech = parseFloat(speech / 10);
         requestData["speechiness"] = speech;
       }
-      if (instrumental) {
+      if (instrumentalValid && !isNaN(instrumental)) {
         instrumental = parseFloat(instrumental / 10);
         requestData["instrumentalness"] = instrumental;
       }
-      if (tempo) {
-        tempo = parseFloat(tempo / 10);
+      if (tempoValid && !isNaN(tempo)) {
         requestData["tempo"] = tempo;
       }
-      if (valence) {
+      if (valenceValid && !isNaN(valence)) {
         valence = parseFloat(valence / 10);
         requestData["valence"] = valence;
       }
@@ -276,9 +284,6 @@ const token_id = "personal-dj-token";
         if (responseIsSuccess(data)) {
           recList_id = displayRecommendations(data.trackResult);
           recList_cache = data.trackResult;
-
-          recList_id = displayRecommendations(data.trackResult);
-
           document.getElementById("explicit-button").checked = false;
         }
         loading("rec-button", false, origText);
@@ -320,8 +325,6 @@ const token_id = "personal-dj-token";
         data: {
           track_list: recList_id,
           seed_song: selectedTrackName,
-          energy: energy,
-          dance: dance,
           token: sessionStorage.getItem(token_id),
         },
       }).done(function (data) {
@@ -414,18 +417,28 @@ function selectTrack(track_id) {
 }
 
 // Validates that a form is not empty and adds necessary valid/invalid classes
-function validateForm(in_form_id) {
+function validateForm(in_form_id, minValue, maxValue) {
   var x = document.getElementById(in_form_id);
-  let checkValidity = x.required;
+  let checkValidity = x.required || !isEmptyInput(in_form_id); // check validity if x is required or if it's not empty
   if (checkValidity) {
     x.classList.remove("is-invalid");
-    if (!x.value || x.value.length < 1) {
+    if (
+      !x.value ||
+      isEmptyInput(in_form_id) ||
+      x.value < minValue ||
+      x.value > maxValue
+    ) {
       x.classList.remove("is-valid");
       x.classList.add("is-invalid");
       return false;
     }
   }
   return true;
+}
+
+// Returns true if the id of the input contains empty input
+function isEmptyInput(in_id) {
+  return document.getElementById(in_id).value.trim().length < 1;
 }
 
 // Checks if error exists and shows error message. True = NO error, False = Error
@@ -586,12 +599,11 @@ function clearResults() {
   recList_id = [];
 }
 
-function showOptionalInputs(element) {
-  if (element.id === "show-optional-inputs") {
-    if (element.checked) {
-      document.getElementById("additional-options").style.display = "block";
-    } else {
-      document.getElementById("additional-options").style.display = "none";
-    }
+// Show optional inputs on the form
+function showOptionalInputs(show) {
+  if (show == true) {
+    document.getElementById("additional-options").style.display = "block";
+  } else {
+    document.getElementById("additional-options").style.display = "none";
   }
 }
