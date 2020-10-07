@@ -1,5 +1,5 @@
 # The people that help make this project what it is: Our Contributors!
-- *Code Owner:* [Ryan Russell](https://github.com/RyanRussell00) (Code Owner)
+- *Code Owner:* [Ryan Russell](https://github.com/RyanRussell00)
 - [Jake Capra](https://github.com/JakeCapra)
 - [astriskit](https://github.com/astriskit)
 - [Gareffmz](https://github.com/Gareffmz)
