@@ -17,7 +17,7 @@ if (process.env.NODE_ENV == "production") {
 const _client_id = process.env.NODE_SPOTIFY_CLIENT_ID || null;
 const _client_secret = process.env.NODE_SPOTIFY_CLIENT_SECRET || null;
 const track_search_limit = 5;
-const directoryPath = __dirname + '/../';
+const directoryPath = __dirname + "/../";
 
 /**
  * Generates a random string containing numbers and letters
@@ -39,27 +39,30 @@ const stateKey = "spotify_auth_state";
 
 const app = express();
 
-app.use(express.static(directoryPath))
-    .use(helmet())
-    .use(compression())
-    .use(cors())
-    .use(cookieParser());
+app
+  .use(express.static(directoryPath))
+  .use(helmet())
+  .use(compression())
+  .use(cors())
+  .use(cookieParser());
 
-app.get('/login', function(req, res) {
-    let state = generateRandomString(16);
-    res.clearCookie(stateKey);
-    res.cookie(stateKey, state);
+app.get("/login", function (req, res) {
+  let state = generateRandomString(16);
+  res.clearCookie(stateKey);
+  res.cookie(stateKey, state);
 
-    let scope = 'playlist-modify-public playlist-modify-private';
-    res.redirect('https://accounts.spotify.com/authorize?' +
-        querystring.stringify({
-            response_type: 'code',
-            client_id: _client_id,
-            scope: scope,
-            redirect_uri: _redirect_uri,
-            state: state,
-            show_dialog: true // show dialog to allow users to log out
-        }));
+  let scope = "playlist-modify-public playlist-modify-private";
+  res.redirect(
+    "https://accounts.spotify.com/authorize?" +
+      querystring.stringify({
+        response_type: "code",
+        client_id: _client_id,
+        scope: scope,
+        redirect_uri: _redirect_uri,
+        state: state,
+        show_dialog: true, // show dialog to allow users to log out
+      })
+  );
 });
 
 app.get("/callback", function (req, res) {
@@ -159,16 +162,33 @@ app.get("/trackSearch", function (req, res) {
 
 // Generate up to 50 recommended songs given params
 app.get("/recommendations", function (req, res) {
+  let requestData = {
+    limit: req.query.limit,
+    seed_artists: req.query.seed_artists,
+    seed_tracks: req.query.seed_tracks,
+    target_energy: req.query.energy,
+    target_danceability: req.query.danceability,
+    min_popularity: req.query.popular,
+  };
+  if (req.query.acousticness) {
+    requestData["target_acousticness"] = req.query.acousticness;
+  }
+  if (req.query.speechiness) {
+    requestData["target_speechiness"] = req.query.speechiness;
+  }
+  if (req.query.instrumentalness) {
+    requestData["target_instrumentalness"] = req.query.instrumentalness;
+  }
+  if (req.query.tempo) {
+    requestData["target_tempo"] = req.query.tempo;
+  }
+  if (req.query.valence) {
+    requestData["target_valence"] = req.query.valence;
+  }
+
   let url =
     "https://api.spotify.com/v1/recommendations?" +
-    querystring.stringify({
-      limit: req.query.limit,
-      seed_artists: req.query.seed_artists,
-      seed_tracks: req.query.seed_tracks,
-      target_energy: req.query.energy,
-      target_danceability: req.query.danceability,
-      min_popularity: req.query.popular,
-    });
+    querystring.stringify(requestData);
 
   ax({
     method: "get",
@@ -193,29 +213,16 @@ app.get("/recommendations", function (req, res) {
 // Creates a playlist, then calls function to add songs to playlist
 app.get("/createPlaylist", function (req, res) {
   let seed_song = req.query.seed_song;
-  let dance = req.query.dance;
-  let energy = req.query.energy;
 
   let date = new Date();
   let dateStr =
     +date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 
-  let name = seed_song + " : Personally Tailored For You!";
-  let desc =
-    "Custom playlist made with " +
-    dance +
-    " danceability, " +
-    energy +
-    " energy, and seeded from: " +
-    seed_song +
-    ". Go to https://personal-dj-app.herokuapp.com/ to make your Personal DJ now!";
+  let name = seed_song + " : Personally DJ'd For You!";
+  let desc = "Go to https://personal-dj-app.herokuapp.com to make your Personal Playlist now!";
 
   if (!seed_song) {
-    name = "Personal DJ Playlist " + dateStr;
-  }
-  if (!dance || !energy) {
-    desc =
-      "Custom playlist created by your Personal DJ! Go to https://personal-dj-app.herokuapp.com/ to make your Personal DJ now!";
+    name = "Personal DJ Playlist!";
   }
 
   // get user profile information

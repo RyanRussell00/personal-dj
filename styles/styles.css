@@ -130,3 +130,7 @@ body::after {
   z-index: -1;
   content: url("../assets/loader.svg");
 }
+
+#additional-options{
+  display: none;
+}
