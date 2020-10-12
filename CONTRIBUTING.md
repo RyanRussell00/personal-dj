@@ -12,6 +12,7 @@ The live version of this app is launched on a Heroku server and only the code ow
 4. Keep the Spotify Dashboard open, you'll need it in the next steps.
 
 # 2: Setting up Environmental Variables
+
 <b>NOTE: This tutorial only covers how to do it on Windows or Linux. If you use Mac I wish you the best of luck.</b>
 
 ## Windows Env Variables
@@ -45,7 +46,15 @@ The live version of this app is launched on a Heroku server and only the code ow
    <br>
    `NODE_SPOTIFY_CLIENT_SECRET`=The Client secret from your application
 
-# 3: Restart your IDE and possibly even computer
+# 3: Setup local project development
+
+-   Clone the project to local system. Fork the repo @ `https://github.com/RyanRussell00/personal-dj.git` and clone forked repo to local using `git clone <fork-repo>`.
+-   Optionally, if you are using `VSCode` IDE, you can open the project on it using - `code personal-dj`, where `personal-dj` represents the directory name to open. Ensure when you are hitting that command you are in the directory containing `personal-dj`.
+    -   Also, you should install this prettier extension to be used along with `VSCode`: [`esbenp.prettier-vscode`](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+-   Go to the project-directory and install all the dependencies using - `npm install`.
+-   Optionally, don't mutate the master branch of the fork - it can help to sync the changes from the original repository. So, you may start to work by creating a new-branch from master.
+
+# 4: Restart your IDE and possibly even computer
 
 For the environmental variables to take effect you'll need to restart your IDE, and possible even your computer.
 
