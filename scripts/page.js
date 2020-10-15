@@ -31,6 +31,8 @@ const token_id = "personal-dj-token";
   recList_id = [];
 
   recList_cache = {};
+  //  To vriable that checks for duplicate playlist
+  let playlistIsCreated = false;
 
   if (error) {
     msg = error;
@@ -288,10 +290,24 @@ const token_id = "personal-dj-token";
         }
         loading("rec-button", false, origText);
         onRemoveSpinner();
+        playlistIsCreated = false;
       });
     },
     false
   );
+
+  // function to check for the duplicate playlist
+
+  function checkForDuplicatePlaylist() {
+    if (!playlistIsCreated) {
+      return true;
+    } else {
+      const confirmation = confirm(
+        "This playlist already created do you want to create duplicate playlist?"
+      );
+      return confirmation;
+    }
+  }
 
   // listener for create playlist button
   document.getElementById("playlist-button").addEventListener(
@@ -299,51 +315,55 @@ const token_id = "personal-dj-token";
     function (e) {
       e.preventDefault();
 
-      let dance = document.getElementById("danceability").value;
-      let energy = document.getElementById("energy").value;
+      if (checkForDuplicatePlaylist()) {
+        let dance = document.getElementById("danceability").value;
+        let energy = document.getElementById("energy").value;
 
-      if (
-        !recList_id ||
-        recList_id.length < 1 ||
-        !dance ||
-        dance < 0 ||
-        dance > 10 ||
-        !energy ||
-        energy < 0 ||
-        energy > 10
-      ) {
-        return;
-      }
-
-      const { originalText: origText, onRemoveSpinner } = loading(
-        "playlist-button",
-        true
-      );
-
-      $.ajax({
-        url: "/createPlaylist",
-        data: {
-          track_list: recList_id,
-          seed_song: selectedTrackName,
-          token: sessionStorage.getItem(token_id),
-        },
-      }).done(function (data) {
-        // If successfuly created playlist, add tracks
-        if (responseIsSuccess(data) && data && data.data != null) {
-          $.ajax({
-            url: "/addTracks",
-            data: {
-              track_list: recList_id,
-              playlist_id: data.data,
-              token: sessionStorage.getItem(token_id),
-            },
-          }).done(function (data) {
-            responseIsSuccess(data);
-            loading("playlist-button", false, origText);
-            onRemoveSpinner();
-          });
+        if (
+          !recList_id ||
+          recList_id.length < 1 ||
+          !dance ||
+          dance < 0 ||
+          dance > 10 ||
+          !energy ||
+          energy < 0 ||
+          energy > 10
+        ) {
+          return;
         }
-      });
+
+        const { originalText: origText, onRemoveSpinner } = loading(
+          "playlist-button",
+          true
+        );
+
+        $.ajax({
+          url: "/createPlaylist",
+          data: {
+            track_list: recList_id,
+            seed_song: selectedTrackName,
+            token: sessionStorage.getItem(token_id),
+          },
+        }).done(function (data) {
+          // If successfuly created playlist, add tracks
+          if (responseIsSuccess(data) && data && data.data != null) {
+            $.ajax({
+              url: "/addTracks",
+              data: {
+                track_list: recList_id,
+                playlist_id: data.data,
+                token: sessionStorage.getItem(token_id),
+              },
+            }).done(function (data) {
+              responseIsSuccess(data);
+              loading("playlist-button", false, origText);
+              onRemoveSpinner();
+              playlistIsCreated = true;
+              alert("Playlist saved successfully");
+            });
+          }
+        });
+      }
 
       // listener for explicitness button
 
