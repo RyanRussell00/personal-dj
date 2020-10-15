@@ -219,7 +219,8 @@ app.get("/createPlaylist", function (req, res) {
     +date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 
   let name = seed_song + " : Personally DJ'd For You!";
-  let desc = "Go to https://personal-dj-app.herokuapp.com to make a free Personally DJ'd Playlist now!";
+  let desc =
+    "Go to https://personal-dj-app.herokuapp.com to make a free Personally DJ'd Playlist now!";
 
   if (!seed_song) {
     name = "Personal DJ Playlist!";
