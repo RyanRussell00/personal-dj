@@ -5,7 +5,7 @@
 Create playlists directly to your Spotify account with fine tuned preferences such as:
 
 -   How _danceable_ you want each track
--   How much _energy_ you want each track
+-   How much _energetic_ you want each track
 -   How popular you want each track
     <br>
 
@@ -13,7 +13,7 @@ Create playlists directly to your Spotify account with fine tuned preferences su
 
 1. Start by reading the [CONTRIBUTING.md](https://github.com/RyanRussell00/personal-dj/blob/master/CONTRIBUTING.md) file
 2. Look at the issues and select an issue. Try starting with a smaller issue (marked with "good first issue") to get a feel for the code-base.
-3. Fork from master and do your code, then open a pull request and respond to any reviews.
+3. Fork from master and write your code, then open a pull request and respond to any reviews.
 
 ## Credits
 
