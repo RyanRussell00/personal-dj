@@ -33,6 +33,10 @@ const token_id = "personal-dj-token";
   recList_cache = {};
   //  To vriable that checks for duplicate playlist
   let playlistIsCreated = false;
+  // Variable for the filter explicit playlist
+  let explicitPlaylistIsCreated = false;
+  // To check filter isChecked or not
+  let filterIsChecked = false;
 
   if (error) {
     msg = error;
@@ -291,6 +295,7 @@ const token_id = "personal-dj-token";
         loading("rec-button", false, origText);
         onRemoveSpinner();
         playlistIsCreated = false;
+        explicitPlaylistIsCreated = false;
       });
     },
     false
@@ -299,7 +304,9 @@ const token_id = "personal-dj-token";
   // function to check for the duplicate playlist
 
   function checkForDuplicatePlaylist() {
-    if (!playlistIsCreated) {
+    if (filterIsChecked && !explicitPlaylistIsCreated) {
+      return true;
+    } else if (!playlistIsCreated && !filterIsChecked) {
       return true;
     } else {
       const confirmation = confirm(
@@ -307,6 +314,14 @@ const token_id = "personal-dj-token";
       );
       return confirmation;
     }
+    // if (!playlistIsCreated || (filterIsChecked && !explicitPlaylistIsCreated)) {
+    //   return true;
+    // } else {
+    //   const confirmation = confirm(
+    //     "This playlist already created do you want to create duplicate playlist?"
+    //   );
+    //   return confirmation;
+    // }
   }
 
   // listener for create playlist button
@@ -356,24 +371,33 @@ const token_id = "personal-dj-token";
               },
             }).done(function (data) {
               responseIsSuccess(data);
-              loading("playlist-button", false, origText);
               onRemoveSpinner();
-              playlistIsCreated = true;
+
+              if (filterIsChecked && !explicitPlaylistIsCreated) {
+                explicitPlaylistIsCreated = true;
+              }
+              if (!playlistIsCreated && !filterIsChecked) {
+                playlistIsCreated = true;
+              }
+              loading("playlist-button", false, origText);
               alert("Playlist saved successfully");
             });
           }
         });
       }
-
       // listener for explicitness button
 
-      document
-        .getElementById("explicit-button")
-        .addEventListener("click", function (e) {
-          var ischecked = e.target.checked;
-
-          recList_id = displayRecommendations(recList_cache, ischecked);
-        });
+      // document
+      //   .getElementById("explicit-button")
+      //   .addEventListener("click", function (e) {
+      //     var ischecked = e.target.checked;
+      //     recList_id = displayRecommendations(recList_cache, ischecked);
+      //     if (playlistIsCreated) {
+      //       playlistIsCreated = false;
+      //     } else {
+      //       playlistIsCreated = true;
+      //     }
+      //   });
     },
     false
   );
@@ -384,7 +408,7 @@ const token_id = "personal-dj-token";
     .getElementById("explicit-button")
     .addEventListener("click", function (e) {
       var ischecked = e.target.checked;
-
+      filterIsChecked = ischecked;
       recList_id = displayRecommendations(recList_cache, ischecked);
     });
 })();
