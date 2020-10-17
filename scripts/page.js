@@ -356,25 +356,11 @@ const token_id = "personal-dj-token";
                     });
                 }
             });
-
-            // listener for explicitness button
-
-            document
-                .getElementById("explicit-button")
-                .addEventListener("click", function (e) {
-                    var ischecked = e.target.checked;
-
-                    recList_id = displayRecommendations(
-                        recList_cache,
-                        ischecked
-                    );
-                });
         },
         false
     );
 
     // listener for explicitness button
-
     document
         .getElementById("explicit-button")
         .addEventListener("click", function (e) {
