@@ -5,7 +5,7 @@
 Create playlists directly to your Spotify account with fine tuned preferences such as:
 
 -   How _danceable_ you want each track
--   How much _energetic_ you want each track
+-   How much _energy_ you want each track to have
 -   How popular you want each track
     <br>
 
