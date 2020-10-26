@@ -31,6 +31,12 @@ const token_id = "personal-dj-token";
     recList_id = [];
 
     recList_cache = {};
+    //  To vriable that checks for duplicate playlist
+    let playlistIsCreated = false;
+    // Variable for the filter explicit playlist
+    let explicitPlaylistIsCreated = false;
+    // To check filter isChecked or not
+    let filterIsChecked = false;
 
     if (error) {
         msg = error;
@@ -300,62 +306,87 @@ const token_id = "personal-dj-token";
                 }
                 loading("rec-button", false, origText);
                 onRemoveSpinner();
+                playlistIsCreated = false;
+                explicitPlaylistIsCreated = false;
             });
         },
         false
     );
+
+    // function to check for the duplicate playlist
+
+    function checkForDuplicatePlaylist() {
+        if (filterIsChecked && !explicitPlaylistIsCreated) {
+            return true;
+        } else if (!playlistIsCreated && !filterIsChecked) {
+            return true;
+        } else {
+            const confirmation = confirm(
+                "This playlist already created do you want to create duplicate playlist?"
+            );
+            return confirmation;
+        }
+    }
 
     // listener for create playlist button
     document.getElementById("playlist-button").addEventListener(
         "click",
         function (e) {
             e.preventDefault();
+            if (checkForDuplicatePlaylist()) {
+                let dance = document.getElementById("danceability").value;
+                let energy = document.getElementById("energy").value;
 
-            let dance = document.getElementById("danceability").value;
-            let energy = document.getElementById("energy").value;
+                if (
+                    !recList_id ||
+                    recList_id.length < 1 ||
+                    !dance ||
+                    dance < 0 ||
+                    dance > 10 ||
+                    !energy ||
+                    energy < 0 ||
+                    energy > 10
+                ) {
+                    return;
+                }
 
-            if (
-                !recList_id ||
-                recList_id.length < 1 ||
-                !dance ||
-                dance < 0 ||
-                dance > 10 ||
-                !energy ||
-                energy < 0 ||
-                energy > 10
-            ) {
-                return;
+                const { originalText: origText, onRemoveSpinner } = loading(
+                    "playlist-button",
+                    true
+                );
+
+                $.ajax({
+                    url: "/createPlaylist",
+                    data: {
+                        track_list: recList_id,
+                        seed_song: selectedTrackName,
+                        token: sessionStorage.getItem(token_id)
+                    }
+                }).done(function (data) {
+                    // If successfuly created playlist, add tracks
+                    if (responseIsSuccess(data) && data && data.data != null) {
+                        $.ajax({
+                            url: "/addTracks",
+                            data: {
+                                track_list: recList_id,
+                                playlist_id: data.data,
+                                token: sessionStorage.getItem(token_id)
+                            }
+                        }).done(function (data) {
+                            responseIsSuccess(data);
+                            loading("playlist-button", false, origText);
+                            onRemoveSpinner();
+                            if (filterIsChecked && !explicitPlaylistIsCreated) {
+                                explicitPlaylistIsCreated = true;
+                            }
+                            if (!playlistIsCreated && !filterIsChecked) {
+                                playlistIsCreated = true;
+                            }
+                            alert("Playlist saved successfully");
+                        });
+                    }
+                });
             }
-
-            const { originalText: origText, onRemoveSpinner } = loading(
-                "playlist-button",
-                true
-            );
-
-            $.ajax({
-                url: "/createPlaylist",
-                data: {
-                    track_list: recList_id,
-                    seed_song: selectedTrackName,
-                    token: sessionStorage.getItem(token_id)
-                }
-            }).done(function (data) {
-                // If successfuly created playlist, add tracks
-                if (responseIsSuccess(data) && data && data.data != null) {
-                    $.ajax({
-                        url: "/addTracks",
-                        data: {
-                            track_list: recList_id,
-                            playlist_id: data.data,
-                            token: sessionStorage.getItem(token_id)
-                        }
-                    }).done(function (data) {
-                        responseIsSuccess(data);
-                        loading("playlist-button", false, origText);
-                        onRemoveSpinner();
-                    });
-                }
-            });
         },
         false
     );
@@ -365,7 +396,7 @@ const token_id = "personal-dj-token";
         .getElementById("explicit-button")
         .addEventListener("click", function (e) {
             var ischecked = e.target.checked;
-
+            filterIsChecked = ischecked;
             recList_id = displayRecommendations(recList_cache, ischecked);
         });
 })();
