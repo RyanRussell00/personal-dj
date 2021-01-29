@@ -203,7 +203,7 @@ const token_id = "personal-dj-token";
             danceValid = validateForm(dance, 0, 10);
             energyValid = validateForm(energy, 0, 10);
             popularValid = validateForm(popular, 0, 100);
-            limitValid = validateForm(limit, 0, 50);
+            limitValid = validateForm(limit, 1, 50);
 
             dance = document.getElementById(dance).value;
             energy = document.getElementById(energy).value;
