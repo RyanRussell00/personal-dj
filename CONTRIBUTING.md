@@ -1,4 +1,4 @@
-# A quick background
+# A quick background 
 
 The live version of this app is launched on a Heroku server and only the code owner has access to it. As a developer, you're able to run the web app locally as long as you setup the correct environment variables and Spotify settings.
 
