@@ -49,9 +49,12 @@ The live version of this app is launched on a Heroku server and only the code ow
 # 3: Setup local project development
 
 -   Clone the project to local system. Fork the repo @ `https://github.com/RyanRussell00/personal-dj.git` and clone forked repo to local using `git clone <fork-repo>`.
--   Optionally, if you are using `VSCode` IDE, you can open the project on it using - `code personal-dj`, where `personal-dj` represents the directory name to open. Ensure when you are hitting that command you are in the directory containing `personal-dj`.
     -   Also, you should install this prettier extension to be used along with `VSCode`: [`esbenp.prettier-vscode`](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
--   Go to the project-directory and install all the dependencies using - `npm install`.
+
+- Navigate to the `api` folder and run `npm install`
+
+- Navigate back out to the `ui` folder and run `npm install`
+
 -   Optionally, don't mutate the master branch of the fork - it can help to sync the changes from the original repository. So, you may start to work by creating a new-branch from master.
 
 # 4: Restart your IDE and possibly even computer
@@ -60,5 +63,6 @@ For the environmental variables to take effect you'll need to restart your IDE, 
 
 # 4: Running the application
 
-Open your terminal in the project directory and execute `npm run dev`.
+- In the `api` folder run `npm run dev` and in the `ui` folder run `npm start`
+
 <br> If there are no issues you should be in business! Happy coding :)
