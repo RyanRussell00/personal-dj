@@ -163,4 +163,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# IntelliJ
+.idea_modules/
+.idea/
+
 # End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,linux,windows
