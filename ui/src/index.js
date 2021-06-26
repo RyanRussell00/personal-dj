@@ -2,26 +2,26 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import Home from "./components/Home";
-import PlaylistCreator from "./components/Dashboard";
 import reportWebVitals from "./reportWebVitals";
 import Footer from "./components/Footer";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {MediaSearchForm} from "./components/MediaSearchForm";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Switch>
-        <Route path="/" exact>
-          <Home />
-        </Route>
-        <Route path="/dashboard" exact>
-          <PlaylistCreator />
-        </Route>
-      </Switch>
-      <Footer />
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById("root")
+    <React.StrictMode>
+        <BrowserRouter>
+            <Switch>
+                <Route path="/" exact>
+                    <Home/>
+                </Route>
+                <Route path="/dashboard" exact>
+                    <MediaSearchForm/>
+                </Route>
+            </Switch>
+            <Footer/>
+        </BrowserRouter>
+    </React.StrictMode>,
+    document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

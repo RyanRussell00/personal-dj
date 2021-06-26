@@ -1,5 +1,6 @@
 import React from "react";
-import heart_image from "../assets/8-bit-heart.png"
+
+const heart_image = require("../assets/8-bit-heart.png");
 
 const Footer = () => {
     return (

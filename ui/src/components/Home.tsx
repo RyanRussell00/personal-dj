@@ -1,7 +1,7 @@
 import React from "react";
 import {PATHS} from "../utilities/constants";
 import axios from "axios";
-import logo from "../assets/personal_dj_logo.png"
+const logo = require("../assets/personal_dj_logo.png");
 
 const Home = () => {
     return (
