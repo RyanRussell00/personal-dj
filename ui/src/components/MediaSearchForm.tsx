@@ -1,5 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useForm, SubmitHandler} from "react-hook-form";
+import {getTokenFromCookies, saveToken, tokenError} from "../utilities/cookieHandler";
+import {useHistory} from 'react-router-dom';
 
 type Inputs = {
     example: string,
@@ -9,6 +11,22 @@ type Inputs = {
 export const MediaSearchForm = () => {
     const {register, handleSubmit, watch, formState: {errors}} = useForm<Inputs>();
     const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
+    const history = useHistory();
+    const query = new URLSearchParams(window.location.search);
+    const newToken = query.get("token");
+
+    // Get user token from the URL bar
+    // TODO: Maybe this should be passed back in the request's body / state instead of URL params?
+    useEffect(() => {
+        if (newToken) {
+            saveToken(newToken);
+            // Hide user token so they don't accidentally copy paste it out
+            window.location.search = "";
+        } else if (!getTokenFromCookies()) {
+            tokenError();
+            history.push("/");
+        }
+    }, []);
 
     console.log(watch("example")) // watch input value by passing the name of it
 

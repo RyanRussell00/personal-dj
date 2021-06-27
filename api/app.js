@@ -105,7 +105,7 @@ app.get("/callback", function (req, res) {
     })
         .then((response) => {
             let token = response.data.access_token;
-            res.redirect("/dashboard?token=" + token);
+            res.redirect("http://localhost:3000/dashboard?token=" + token);
         })
         .catch((error) => {
             console.error("Failed to login: \n" + error);
