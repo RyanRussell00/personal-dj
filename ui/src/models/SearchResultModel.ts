@@ -3,7 +3,4 @@ export interface SearchResultModel {
     title: string,
     imgUrl: string,
     artistName: string,
-    isSelected: boolean,
-    onClick: (id: string) => void,
-    showSelected: boolean,
 }

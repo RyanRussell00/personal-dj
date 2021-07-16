@@ -1,6 +1,6 @@
 import {removeCookie} from './cookieHandler'
 
-export const handleError = (error) => {
+export const handleError = (error: any) => {
     console.error(error)
     if (!error || !error.message) {
         alert("Unknown error. Please try refreshing your browser.");
@@ -11,7 +11,6 @@ export const handleError = (error) => {
         removeCookie();
 
     } else {
-        alert("Unkown error. Please try again. If issue continues, refresh your browser.")
-
+        alert("Unknown error. Please try again. If issue continues, refresh your browser.")
     }
 }
