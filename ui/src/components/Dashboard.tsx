@@ -31,8 +31,10 @@ export const Dashboard = () => {
     }
 
     return (
-        <TrackSearchForm setSelected={setSelectedTrackId}/>
-        //    <PlaylistParametersForm/>
-        //    <PlaylistResults />
+        <div className={"container text-center my-3"}>
+            <TrackSearchForm setSelected={setSelectedTrackId}/>
+            {/*    <PlaylistParametersForm/>*/}
+            {/*    <PlaylistResults />*/}
+        </div>
     )
 }
