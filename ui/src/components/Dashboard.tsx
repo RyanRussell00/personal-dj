@@ -1,12 +1,13 @@
 import {SearchResultModel} from "../models/SearchResultModel";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {PlaylistParametersModel} from "../models/PlaylistParametersModel";
 import {TrackSearchForm} from "./TrackSearchForm";
 import {getTokenFromCookies, saveToken, tokenError} from "../utilities/cookieHandler";
 import {useHistory} from "react-router-dom";
+import {PlaylistParametersForm} from "./PlaylistParametersForm";
 
 export const Dashboard = () => {
-    const selectedTrackId = useRef("");
+    const [selectedTrackId, setSelectedTrackId] = useState("");
     const playlistParameters = useRef<PlaylistParametersModel>();
 
     const history = useHistory();
@@ -26,14 +27,16 @@ export const Dashboard = () => {
         }
     }, []);
 
-    const setSelectedTrackId = (trackId: string) => {
-        selectedTrackId.current = trackId;
+    const setParameters = (params: PlaylistParametersModel) => {
+        console.log(params);
     }
 
     return (
         <div className={"container text-center my-3"}>
             <TrackSearchForm setSelected={setSelectedTrackId}/>
-            {/*    <PlaylistParametersForm/>*/}
+            {selectedTrackId.length > 0 ?
+                <PlaylistParametersForm setParameters={setParameters}/> : <></>
+            }
             {/*    <PlaylistResults />*/}
         </div>
     )

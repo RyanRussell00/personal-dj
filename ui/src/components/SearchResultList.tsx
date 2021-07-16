@@ -12,8 +12,8 @@ export const SearchResultList: React.FC<SearchResultListProps> = ({searchResults
     const [selected, setSelected] = useState("");
 
     const handleSelectTrack = (trackId: string) => {
+        setCurrentSelected(trackId); // Callback function so the parent can have access to the selected id
         setSelected(trackId); // Set the selected to show which one is highlighted
-        setCurrentSelected(selected); // Callback function so the parent can have access to the selected id
     };
 
     return (

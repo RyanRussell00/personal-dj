@@ -4,9 +4,8 @@ export interface PlaylistParametersModel {
     danceable: number,
     hype: number,
     instrumental: number,
+    numOfSongs: number,
     popular: number,
     positiveness: number
-    songs: number,
-    trackName: string,
     vocal: number,
 }
