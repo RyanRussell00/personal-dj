@@ -3,6 +3,7 @@ import {SearchResultModel} from "../models/SearchResultModel";
 import {fixTrackName} from "./DisplayUtilities";
 import {image404_url} from "./constants";
 import {PlaylistTrackModel} from "../models/PlaylistTrackModel";
+import {handleError} from "./apiErrorHandler";
 
 export const mapJSONTrackSearchToModel = (data: AxiosResponse) => {
     let results = new Map<string, SearchResultModel>();
@@ -29,6 +30,7 @@ export const mapJSONTrackSearchToModel = (data: AxiosResponse) => {
         }
     } catch (e) {
         console.error("Failed to convert track result response to model", e);
+        handleError({message: "401"});
     }
     return results;
 }
@@ -57,11 +59,11 @@ export const mapJSONRecommendedTracksToModel = (data: AxiosResponse) => {
                 nonExplicit.push(track);
             }
         }
-        return [explicit, nonExplicit];
     } catch (e) {
         console.error("Failed to convert recommendations to model");
-        return [[], []];
+        handleError({message: "401"});
     }
+    return [explicit, nonExplicit];
 }
 export const idsFromTracks = (tracks: PlaylistTrackModel[]) => {
     let ids: string[] = [];
