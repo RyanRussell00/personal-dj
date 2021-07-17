@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 const TOKEN_COOKIE = "personal_dj_token";
 
-export const saveToken = (newToken) => {
+export const saveToken = (newToken: string) => {
     removeCookie();
     // Set the cookie to expire in 1 hour (Spotify expiry time)
     // The "expires" value has to be in days, so 1/24 is 1 hour

@@ -105,7 +105,7 @@ app.get("/callback", function (req, res) {
     })
         .then((response) => {
             let token = response.data.access_token;
-            res.redirect("/dashboard?token=" + token);
+            res.redirect("http://localhost:3000/dashboard?token=" + token);
         })
         .catch((error) => {
             console.error("Failed to login: \n" + error);
@@ -160,26 +160,34 @@ app.get("/api/trackSearch", function (req, res) {
 
 // Generate up to 50 recommended songs given params
 app.get("/api/recommendations", function (req, res) {
+    // Required data
     let requestData = {
-        limit: req.query.limit,
         seed_tracks: req.query.seed_tracks,
-        target_energy: req.query.energy,
-        target_danceability: req.query.danceability,
-        min_popularity: req.query.popular,
+        limit: req.query.limit
     };
-    if (req.query.acousticness) {
+    // Optional data
+    if (req.query.danceability !== "") {
+        requestData["target_danceability"] = req.query.danceability;
+    }
+    if (req.query.energy !== "") {
+        requestData["target_energy"] = req.query.energy;
+    }
+    if (req.query.popular !== "") {
+        requestData[" target_popularity"] = req.query.popular;
+    }
+    if (req.query.acousticness !== "") {
         requestData["target_acousticness"] = req.query.acousticness;
     }
-    if (req.query.speechiness) {
+    if (req.query.speechiness !== "") {
         requestData["target_speechiness"] = req.query.speechiness;
     }
-    if (req.query.instrumentalness) {
+    if (req.query.instrumentalness !== "") {
         requestData["target_instrumentalness"] = req.query.instrumentalness;
     }
-    if (req.query.tempo) {
+    if (req.query.tempo !== "") {
         requestData["target_tempo"] = req.query.tempo;
     }
-    if (req.query.valence) {
+    if (req.query.valence !== "") {
         requestData["target_valence"] = req.query.valence;
     }
 
@@ -207,6 +215,16 @@ app.get("/api/recommendations", function (req, res) {
         });
 });
 
+function getReadablePlaylistParameters(data) {
+    let dataAsJSON = JSON.parse(data);
+    let result = ``;
+    for (let key in dataAsJSON) {
+        if (dataAsJSON[key] && dataAsJSON[key] !== "")
+            result += key + ": " + dataAsJSON[key] + ", ";
+    }
+    return result;
+}
+
 // Creates a playlist, then calls function to add songs to playlist
 app.get("/api/createPlaylist", function (req, res) {
 
@@ -214,10 +232,22 @@ app.get("/api/createPlaylist", function (req, res) {
     let dateStr =
         +date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 
-    let name = "Playlist Made by PersonalDJ";
+    let track = JSON.parse(req.query.seed_track);
+    let playlist_params = req.query.playlist_params;
+
+    let name = "Playlist made by PersonalDJ";
     let desc =
-        "Go to https://personal-dj-app.herokuapp.com to make a free Personally DJ'd Playlist now!\n Created on " +
-        dateStr;
+        "Go to https://personal-dj-app.herokuapp.com to make a free Personally DJ'd Playlist now!" +
+        "\n Created on "
+
+    // NOTE: Spotify does not support line breaks or tabs in the description
+    if (track && playlist_params) {
+        name = track.title + " : PersonalDJ'd for you!"
+        desc = "Go to https://personal-dj-app.herokuapp.com to make a free Personally DJ'd Playlist now! ~~~ " +
+            "Created on " + dateStr + " ~~~ " +
+            "Fine-tuned with:  " +
+            getReadablePlaylistParameters(playlist_params);
+    }
 
     // get user profile information
     ax({
