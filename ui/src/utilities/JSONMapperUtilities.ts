@@ -5,7 +5,7 @@ import {image404_url} from "./constants";
 import {PlaylistTrackModel} from "../models/PlaylistTrackModel";
 
 export const mapJSONTrackSearchToModel = (data: AxiosResponse) => {
-    let results: SearchResultModel[] = [];
+    let results = new Map<string, SearchResultModel>();
     // This fat try catch makes me feel sick
     try {
         let searchResultsAsJSON = data.data.trackResult.tracks.items;
@@ -17,32 +17,30 @@ export const mapJSONTrackSearchToModel = (data: AxiosResponse) => {
             );
             let tempArtistName =
                 searchResultsAsJSON[i].artists[0].name || "Artist Not Found";
-            let tempTrackId = searchResultsAsJSON[i].id;
+            let tempTrackId: string = searchResultsAsJSON[i].id;
             // Add all results to explicit list (both explicit and non explicit)
-            results.push({
-                trackId: tempTrackId,
-                title: tempTitle,
-                imgUrl: tempImgUrl,
-                artistName: tempArtistName,
-            });
+            results.set(tempTrackId,
+                {
+                    trackId: tempTrackId,
+                    title: tempTitle,
+                    imgUrl: tempImgUrl,
+                    artistName: tempArtistName,
+                });
         }
-        return results;
     } catch (e) {
-        console.error("Failed to convert track result response to model");
-        return [];
+        console.error("Failed to convert track result response to model", e);
     }
+    return results;
 }
 
 export const mapJSONRecommendedTracksToModel = (data: AxiosResponse) => {
     let explicit: PlaylistTrackModel[] = [];
     let nonExplicit: PlaylistTrackModel[] = [];
-    console.log(data);
     try {
         if (!data) {
             return [[], []];
         }
         let dataAsJSON = data.data.trackResult;
-        console.log(dataAsJSON);
         for (let i = 0; i < dataAsJSON.tracks.length; i++) {
             let curr = dataAsJSON.tracks[i];
             let track: PlaylistTrackModel = {

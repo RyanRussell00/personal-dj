@@ -8,8 +8,9 @@ export const handleError = (error: any) => {
         return;
     }
     if (error.message.includes("401")) {
-        alert("Session expired. Please refresh your browser.");
+        alert("Session expired. Please login again.");
         removeCookie();
+        window.location.href = '/';
 
     } else {
         alert("Unknown error. Please try again. If issue continues, refresh your browser.")

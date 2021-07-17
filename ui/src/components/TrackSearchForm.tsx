@@ -15,13 +15,13 @@ type TrackSearchFormInputs = {
 };
 
 type TrackSearchFormProps = {
-    setSelected: (trackId: string) => void
+    setSelected: (track: SearchResultModel) => void
 }
 
 export const TrackSearchForm: React.FC<TrackSearchFormProps> = ({setSelected}) => {
-    const {register, handleSubmit, watch, formState: {errors}} = useForm<TrackSearchFormInputs>();
+    const {register, handleSubmit, watch} = useForm<TrackSearchFormInputs>();
 
-    const [results, setResults] = useState<SearchResultModel[]>([]);
+    const [results, setResults] = useState<Map<string, SearchResultModel>>(new Map());
     // Set offset to -1 so we can track when the page is first loaded, so we don't show "No tracks found" on initial load
     // Offset is overridden to 0 after search is pressed
     const offset = useRef(-1);
@@ -84,7 +84,7 @@ export const TrackSearchForm: React.FC<TrackSearchFormProps> = ({setSelected}) =
             </div>
 
             {
-                results.length > 0 ?
+                results.size > 0 ?
                     (<div className="my-4">
                         <ul className="list-inline">
                             <li className="list-inline-item" onClick={loadLessResults}>

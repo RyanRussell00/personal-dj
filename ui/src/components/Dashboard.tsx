@@ -8,7 +8,7 @@ import {PlaylistParametersForm} from "./PlaylistParametersForm";
 import {PlaylistResultList} from "./PlaylistResultList";
 
 export const Dashboard = () => {
-    const [selectedTrackId, setSelectedTrackId] = useState("");
+    const [selectedTrack, setSelectedTrack] = useState<SearchResultModel>();
     const [playlistParams, setPlaylistParams] = useState<PlaylistParametersModel>();
 
     const history = useHistory();
@@ -16,7 +16,6 @@ export const Dashboard = () => {
     const authToken = query.get("token");
 
     // Get user token from the URL bar
-    // TODO: Maybe this should be passed back in the request's body / state instead of URL params?
     useEffect(() => {
         if (authToken) {
             saveToken(authToken);
@@ -29,19 +28,19 @@ export const Dashboard = () => {
     }, []);
 
     const setParameters = (params: PlaylistParametersModel) => {
-        console.log(params);
         setPlaylistParams(params);
     }
 
     return (
         <div className={"container text-center my-3"}>
-            <TrackSearchForm setSelected={setSelectedTrackId}/>
-            {selectedTrackId.length > 0 ?
+            <TrackSearchForm setSelected={setSelectedTrack}/>
+            {selectedTrack ?
                 <PlaylistParametersForm setParameters={setParameters}/> : <></>
             }
             {
-                playlistParams ?
-                    <PlaylistResultList parameters={playlistParams} selectedTrackId={selectedTrackId}/> :
+                selectedTrack && playlistParams ?
+                    <PlaylistResultList parameters={playlistParams}
+                                        selectedTrack={selectedTrack}/> :
                     <></>
             }
         </div>

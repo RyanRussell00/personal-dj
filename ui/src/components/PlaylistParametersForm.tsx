@@ -18,8 +18,6 @@ type PlaylistParametersFormProps = {
 export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({setParameters}) => {
     const {register, handleSubmit, watch, reset} = useForm<PlaylistParametersModel>();
 
-    // Set everything to -1 since they're all optional and we skip values that have less than 0
-    // when creating playlist
     const params = useRef<PlaylistParametersModel>({
         acoustic: -1,
         BPM: -1,
@@ -62,7 +60,7 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
             <p>All inputs below are <b>OPTIONAL.</b> <br/>
                 Leave blank to not set.</p>
 
-            <button onClick={clearAllParameters} className={"btn btn-danger"}>Reset All Parameters</button>
+            <a onClick={clearAllParameters} className={"btn btn-danger"}>Reset All Parameters</a>
 
             <div className={"row row-cols-2 g-2 g-lg-3"}>
 
