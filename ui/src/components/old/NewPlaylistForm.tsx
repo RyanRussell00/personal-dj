@@ -5,7 +5,8 @@
 // import {handleError} from "../../utilities/apiErrorHandler";
 // import {PATHS} from "../../utilities/constants";
 //
-export const NewPlaylistForm = () => {}
+export const NewPlaylistForm = () => {
+}
 // const NewPlaylistForm = ({seedIds, token}) => {
 //         const [showOptionalInputs, setShowOptionalInputs] = useState(false);
 //         const [danceable, setDanceable] = useState("");

@@ -5,10 +5,11 @@ import {TrackSearchForm} from "./TrackSearchForm";
 import {getTokenFromCookies, saveToken, tokenError} from "../utilities/cookieHandler";
 import {useHistory} from "react-router-dom";
 import {PlaylistParametersForm} from "./PlaylistParametersForm";
+import {PlaylistResultList} from "./PlaylistResultList";
 
 export const Dashboard = () => {
     const [selectedTrackId, setSelectedTrackId] = useState("");
-    const playlistParameters = useRef<PlaylistParametersModel>();
+    const [playlistParams, setPlaylistParams] = useState<PlaylistParametersModel>();
 
     const history = useHistory();
     const query = new URLSearchParams(window.location.search);
@@ -29,6 +30,7 @@ export const Dashboard = () => {
 
     const setParameters = (params: PlaylistParametersModel) => {
         console.log(params);
+        setPlaylistParams(params);
     }
 
     return (
@@ -37,7 +39,11 @@ export const Dashboard = () => {
             {selectedTrackId.length > 0 ?
                 <PlaylistParametersForm setParameters={setParameters}/> : <></>
             }
-            {/*    <PlaylistResults />*/}
+            {
+                playlistParams ?
+                    <PlaylistResultList parameters={playlistParams} selected={selectedTrackId}/> :
+                    <></>
+            }
         </div>
     )
 }

@@ -6,7 +6,7 @@ import {SearchResultList} from "./SearchResultList";
 import {SearchResultModel} from "../models/SearchResultModel";
 import axios from "axios";
 import {PATHS} from "../utilities/constants";
-import {mapJSONTrackSearchToModel} from "../utilities/JSONToModelMappers";
+import {mapJSONTrackSearchToModel} from "../utilities/JSONMapperUtilities";
 import {handleError} from "../utilities/apiErrorHandler";
 import {LoadingAnimation} from "../utilities/LoadingAnimation";
 

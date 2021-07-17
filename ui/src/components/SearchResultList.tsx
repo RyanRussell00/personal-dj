@@ -1,6 +1,6 @@
 import {SearchResultModel} from "../models/SearchResultModel";
 import React, {ChangeEvent, EventHandler, MouseEventHandler, useState} from "react";
-import {mapJSONTrackSearchToModel} from "../utilities/JSONToModelMappers";
+import {mapJSONTrackSearchToModel} from "../utilities/JSONMapperUtilities";
 
 type SearchResultListProps = {
     searchResults: SearchResultModel[],
@@ -21,7 +21,6 @@ export const SearchResultList: React.FC<SearchResultListProps> = ({searchResults
             {
                 searchResults.map((result) => {
                     return (
-                        // Use i for tracking which index the result is at
                         <div className="col-lg col-sm-3 m-1">
                             <div
                                 className={
