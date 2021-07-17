@@ -37,6 +37,7 @@ export const PlaylistResultList: React.FC<PlaylistResultListProps> = ({selectedT
                 params: {
                     token: getTokenFromCookies(),
                     seed_tracks: selectedTrackId,
+                    limit: parameters.numOfSongs
                     // danceability: danceable / 10,
                     // energy: energy / 10,
                     // popular,
@@ -53,7 +54,7 @@ export const PlaylistResultList: React.FC<PlaylistResultListProps> = ({selectedT
         })
             .catch((err) => handleError(err))
             .finally(() => setLoading(false));
-    });
+    }, [parameters]);
 
     const savePlaylist = () => {
         setLoading(true);

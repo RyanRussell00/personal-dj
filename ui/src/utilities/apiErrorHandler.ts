@@ -1,5 +1,6 @@
 import {removeCookie} from './cookieHandler'
 
+// TODO: Do some more extensive error handling w/ better messages
 export const handleError = (error: any) => {
     console.error(error)
     if (!error || !error.message) {

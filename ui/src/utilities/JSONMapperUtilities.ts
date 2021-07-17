@@ -36,11 +36,13 @@ export const mapJSONTrackSearchToModel = (data: AxiosResponse) => {
 export const mapJSONRecommendedTracksToModel = (data: AxiosResponse) => {
     let explicit: PlaylistTrackModel[] = [];
     let nonExplicit: PlaylistTrackModel[] = [];
+    console.log(data);
     try {
         if (!data) {
             return [[], []];
         }
         let dataAsJSON = data.data.trackResult;
+        console.log(dataAsJSON);
         for (let i = 0; i < dataAsJSON.tracks.length; i++) {
             let curr = dataAsJSON.tracks[i];
             let track: PlaylistTrackModel = {

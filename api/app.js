@@ -163,9 +163,9 @@ app.get("/api/recommendations", function (req, res) {
     let requestData = {
         limit: req.query.limit,
         seed_tracks: req.query.seed_tracks,
-        target_energy: req.query.energy,
-        target_danceability: req.query.danceability,
-        min_popularity: req.query.popular,
+        // target_energy: req.query.energy,
+        // target_danceability: req.query.danceability,
+        // min_popularity: req.query.popular,
     };
     if (req.query.acousticness) {
         requestData["target_acousticness"] = req.query.acousticness;

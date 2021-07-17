@@ -41,7 +41,7 @@ export const Dashboard = () => {
             }
             {
                 playlistParams ?
-                    <PlaylistResultList parameters={playlistParams} selected={selectedTrackId}/> :
+                    <PlaylistResultList parameters={playlistParams} selectedTrackId={selectedTrackId}/> :
                     <></>
             }
         </div>
