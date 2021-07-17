@@ -1,11 +1,12 @@
 import {SearchResultModel} from "../models/SearchResultModel";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {PlaylistParametersModel} from "../models/PlaylistParametersModel";
 import {TrackSearchForm} from "./TrackSearchForm";
 import {getTokenFromCookies, saveToken, tokenError} from "../utilities/cookieHandler";
 import {useHistory} from "react-router-dom";
 import {PlaylistParametersForm} from "./PlaylistParametersForm";
 import {PlaylistResultList} from "./PlaylistResultList";
+import logo from "../assets/personal_dj_logo.png";
 
 export const Dashboard = () => {
     const [selectedTrack, setSelectedTrack] = useState<SearchResultModel>();
@@ -25,7 +26,7 @@ export const Dashboard = () => {
             tokenError();
             history.push("/");
         }
-    }, []);
+    });
 
     const setParameters = (params: PlaylistParametersModel) => {
         setPlaylistParams(params);
@@ -33,6 +34,8 @@ export const Dashboard = () => {
 
     return (
         <div className={"container text-center my-3"}>
+            <img src={logo} className={"img-fluid col-lg-2 col-1"}/>
+            <hr/>
             <TrackSearchForm setSelected={setSelectedTrack}/>
             {selectedTrack ?
                 <PlaylistParametersForm setParameters={setParameters}/> : <></>

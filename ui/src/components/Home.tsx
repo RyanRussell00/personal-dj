@@ -1,7 +1,7 @@
 import React from "react";
 import {PATHS} from "../utilities/constants";
 import axios from "axios";
-const logo = require("../assets/personal_dj_logo.png");
+import logo from "../assets/personal_dj_logo.png";
 
 const Home = () => {
     return (
@@ -9,7 +9,8 @@ const Home = () => {
             <div className="container w-100">
                 <div className="my-5 justify-content-center text-center">
                     <div className="text-center">
-                        <img src={logo} className="col-1"/>
+                        <img src={logo} className="col-1"
+                             alt={"Personal DJ Logo of a green music element in a circle"}/>
                         <h1 className="">Personal DJ</h1>
                     </div>
                     <p>

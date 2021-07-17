@@ -1,14 +1,5 @@
-import React, {useEffect, useRef, useState} from "react";
-import {useForm, SubmitHandler} from "react-hook-form";
-import {getTokenFromCookies, saveToken, tokenError} from "../utilities/cookieHandler";
-import {useHistory} from 'react-router-dom';
-import {SearchResultList} from "./SearchResultList";
-import {SearchResultModel} from "../models/SearchResultModel";
-import axios from "axios";
-import {PATHS} from "../utilities/constants";
-import {mapJSONTrackSearchToModel} from "../utilities/JSONMapperUtilities";
-import {handleError} from "../utilities/apiErrorHandler";
-import {LoadingAnimation} from "../utilities/LoadingAnimation";
+import React, {useRef} from "react";
+import {useForm} from "react-hook-form";
 import {PlaylistParametersModel} from "../models/PlaylistParametersModel";
 
 type PlaylistParametersFormProps = {
@@ -16,7 +7,7 @@ type PlaylistParametersFormProps = {
 }
 
 export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({setParameters}) => {
-    const {register, handleSubmit, watch, reset} = useForm<PlaylistParametersModel>();
+    const {register, handleSubmit, watch, reset, formState: {errors}} = useForm<PlaylistParametersModel>();
 
     const params = useRef<PlaylistParametersModel>({
         acoustic: -1,
@@ -60,7 +51,8 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
             <p>All inputs below are <b>OPTIONAL.</b> <br/>
                 Leave blank to not set.</p>
 
-            <a onClick={clearAllParameters} className={"btn btn-danger"}>Reset All Parameters</a>
+            <button onClick={clearAllParameters} className={"btn btn-danger"} type={"button"}>Reset All Parameters
+            </button>
 
             <div className={"row row-cols-2 g-2 g-lg-3"}>
 

@@ -54,9 +54,8 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(png|jpe?g|gif)$/,
-                loader: 'url-loader?limit=10000&name=img/[name].[ext]',
-                type: "asset/resource"
+                test: /\.(png|jpg|jpeg|gif)$/i,
+                type: "asset/resource",
             },
             //  We have to add ts-loader to load our typescript files
             {
