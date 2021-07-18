@@ -3,13 +3,14 @@
 The live version of this app is launched on a Heroku server and only the code owner has access to it. As a developer, you're able to run the web app locally as long as you setup the correct environment variables and Spotify settings.
 
 <h1 id="step1"> 1: Setting up Spotify Developer Dashboard</h1>
-1. Accept the Developer Terms & Conditions on Spotify: https://developer.spotify.com/dashboard
-2. Follow the "Register Your App" step from: https://developer.spotify.com/documentation/general/guides/app-settings/#register-your-app
-3. In the Dashboard, select the application you just created and click "Edit Settings" in the top right.
+<ol>
+<li>Accept the Developer Terms & Conditions on Spotify: https://developer.spotify.com/dashboard.</li>
+<li>Follow the "Register Your App" step from: https://developer.spotify.com/documentation/general/guides/app-settings/#register-your-app</li>
+<li>In the Dashboard, select the application you just created and click "Edit Settings" in the top right.
    <br> Add a new callback URI: `http://localhost:8888/callback/`
-   <br><b>NOTE:</b> If you get error about the callback URI please read this [StackOverflow](https://stackoverflow.com/a/63406102/8586250)
-
-4. Keep the Spotify Dashboard open, you'll need it in the next steps.
+   <br><b>NOTE:</b> If you get error about the callback URI please read this [StackOverflow](https://stackoverflow.com/a/63406102/8586250)</li>
+<li>Keep the Spotify Dashboard open, you'll need it in the next steps.</li>
+</ol>
 
 # 2: Setting up Environmental Variables
 

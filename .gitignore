@@ -4,6 +4,9 @@
 ### Linux ###
 *~
 
+
+
+
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
@@ -162,5 +165,11 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# IntelliJ
+.idea_modules/
+.idea/
+
+ui/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,linux,windows
