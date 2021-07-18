@@ -24,7 +24,7 @@ const Footer = () => {
                     Contribute now!
                 </a>
             </p>
-            <small>Version 2.0 -- Now with extra cheese!</small>
+            <small>Version 3.0 -- We used RAID and got rid of the bugs!</small>
         </footer>
     );
 };
