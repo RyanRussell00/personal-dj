@@ -1,6 +1,6 @@
 # [Personal DJ Website](http://personaldj.net/)
 
-### Use it live here: https://personal-dj-app.herokuapp.com/ <br>
+### Use it live here: http://personaldj.net/ <br>
 
 Create playlists directly to your Spotify account with fine tuned preferences such as:
 
