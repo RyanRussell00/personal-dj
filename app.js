@@ -44,9 +44,9 @@ const app = express();
 
 // Below lines are used in prod to deploy.
 // https://www.freecodecamp.org/news/deploy-a-react-node-app-to/
-app.use(express.static(path.join(__dirname, '/build')));
+app.use(express.static(path.join(__dirname, 'ui/build')));
 app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '/build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'ui/build', 'index.html'));
 })
 
 app
@@ -105,7 +105,7 @@ app.get("/callback", function (req, res) {
     })
         .then((response) => {
             let token = response.data.access_token;
-            res.redirect("http://localhost:3000/dashboard?token=" + token);
+            res.redirect("/dashboard?token=" + token);
         })
         .catch((error) => {
             console.error("Failed to login: \n" + error);

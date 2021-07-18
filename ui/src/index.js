@@ -5,7 +5,6 @@ import Home from "./components/Home";
 import reportWebVitals from "./reportWebVitals";
 import Footer from "./components/Footer";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import {TrackSearchForm} from "./components/TrackSearchForm";
 import {Dashboard} from "./components/Dashboard";
 
 ReactDOM.render(
