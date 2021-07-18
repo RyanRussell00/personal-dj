@@ -46,7 +46,7 @@ const app = express();
 // https://www.freecodecamp.org/news/deploy-a-react-node-app-to/
 app.use(express.static(path.join(__dirname, 'ui/build')));
 app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '/build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'ui/build', 'index.html'));
 })
 
 app
