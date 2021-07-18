@@ -1,4 +1,4 @@
-# [Personal DJ Website](https://personal-dj-app.herokuapp.com/)
+# [Personal DJ Website](http://personaldj.net/)
 
 ### Use it live here: https://personal-dj-app.herokuapp.com/ <br>
 
