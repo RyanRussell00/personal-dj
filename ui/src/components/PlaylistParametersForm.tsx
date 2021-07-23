@@ -130,7 +130,7 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                        placeholder={"# of songs"}
                        type={"number"}
                        min={1} max={50} step={1}
-                       className={"p-2"}
+                       className={"p-2 w-25"}
                        required
                 />
             </div>

@@ -9,6 +9,7 @@ const Home = () => {
             <div className="container w-100">
                 <div className="my-5 justify-content-center text-center">
                     <div className="text-center">
+                        <h3 className={"my-4"}><span className="badge bg-danger">New</span> We have a new link: <a className={"text-reset text-decoration-none"} href={"http://personaldj.net"}>www.PersonalDJ.net</a></h3>
                         <img src={logo} className="col-1"
                              alt={"Personal DJ Logo of a green music element in a circle"}/>
                         <h1 className="">Personal DJ</h1>
