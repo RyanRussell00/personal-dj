@@ -71,7 +71,6 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                            type={"number"}
                            min={0} max={1000} step={1}
                            className={"form-control mb-3"}
-                           required
                     />
 
                     <label>How danceable do you want the tracks? (0 to 10)</label>
@@ -80,7 +79,6 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                            type={"number"}
                            min={0} max={10} step={1}
                            className={"form-control mb-3"}
-                           required
                     />
 
                     <label>How positive (emotionally) do you want the tracks? (0 to 10)</label>
@@ -89,7 +87,6 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                            type={"number"}
                            min={0} max={10} step={1}
                            className={"form-control mb-3"}
-                           required
                     />
                 </div>
 
@@ -100,7 +97,6 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                            type={"number"}
                            min={0} max={10} step={1}
                            className={"form-control mb-3"}
-                           required
                     />
 
                     <label>How Instrumental do you want the tracks? (0 to 10)</label>
@@ -109,7 +105,6 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                            type={"number"}
                            min={0} max={10} step={1}
                            className={"form-control mb-3"}
-                           required
                     />
 
                     <label>How popular do you want the tracks? (0 to 100)</label>
@@ -118,7 +113,6 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                            type={"number"}
                            min={0} max={100} step={1}
                            className={"form-control mb-3"}
-                           required
                     />
 
                     <label>How vocal do you want the tracks? (0 to 10)</label>
@@ -127,7 +121,6 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                            type={"number"}
                            min={0} max={10} step={1}
                            className={"form-control mb-3"}
-                           required
                     />
                 </div>
 
