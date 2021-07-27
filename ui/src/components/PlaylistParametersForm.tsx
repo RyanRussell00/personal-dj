@@ -63,7 +63,6 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                            type={"number"}
                            min={0} max={10} step={1}
                            className={"form-control mb-3"}
-                           required
                     />
 
                     <label>What BPM (beats per minute) do you want? (0 to 1000)</label>
