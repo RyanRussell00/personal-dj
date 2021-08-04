@@ -76,6 +76,8 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                     <label>How danceable do you want the tracks? (0 to 10)</label>
                     <input {...register("danceable")}
                            placeholder={"Dance yo butt off"}
+                           type={"number"}
+                           min={0} max={10} step={1}
                            className={"form-control mb-3"}
                     />
 
@@ -108,6 +110,8 @@ export const PlaylistParametersForm: React.FC<PlaylistParametersFormProps> = ({s
                     <label>How popular do you want the tracks? (0 to 100)</label>
                     <input {...register("popular")}
                            placeholder={"Mo' popular"}
+                           type={"number"}
+                           min={0} max={100} step={1}
                            className={"form-control mb-3"}
                     />
 
