@@ -1,6 +1,5 @@
 import {AxiosResponse} from "axios";
 import {SearchResultModel} from "../models/SearchResultModel";
-import {fixTrackName} from "./DisplayUtilities";
 import {image404_url} from "./constants";
 import {PlaylistTrackModel} from "../models/PlaylistTrackModel";
 import {handleError} from "./apiErrorHandler";
@@ -13,9 +12,7 @@ export const mapJSONTrackSearchToModel = (data: AxiosResponse) => {
         // Parse JSON and create them into components
         for (let i = 0; i < searchResultsAsJSON.length; i++) {
             let tempImgUrl = searchResultsAsJSON[i].album.images[0].url || image404_url;
-            let tempTitle = fixTrackName(
-                searchResultsAsJSON[i].name || "Title Not Found"
-            );
+            let tempTitle = searchResultsAsJSON[i].name || "Title Not Found";
             let tempArtistName =
                 searchResultsAsJSON[i].artists[0].name || "Artist Not Found";
             let tempTrackId: string = searchResultsAsJSON[i].id;

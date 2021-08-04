@@ -236,15 +236,12 @@ app.get("/api/createPlaylist", function (req, res) {
     let playlist_params = req.query.playlist_params;
 
     let name = "Playlist made by PersonalDJ";
-    let desc =
-        "Go to https://personal-dj-app.herokuapp.com to make a free Personally DJ'd Playlist now!" +
-        "\n Created on "
+    let desc = "Go to personaldj.net to make a free Personally DJ'd Playlist now! ~~~ Created on ";
 
     // NOTE: Spotify does not support line breaks or tabs in the description
     if (track && playlist_params) {
         name = track.title + " : PersonalDJ'd for you!"
-        desc = "Go to https://personal-dj-app.herokuapp.com to make a free Personally DJ'd Playlist now! ~~~ " +
-            "Created on " + dateStr + " ~~~ " +
+        desc += dateStr + " ~~~ " +
             "Fine-tuned with:  " +
             getReadablePlaylistParameters(playlist_params);
     }
