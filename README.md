@@ -1,3 +1,7 @@
+# THIS PROJECT IS ARCHIVED, all pull requests will be declined.
+
+
+
 # [Personal DJ Website](http://personaldj.net/)
 
 ### Use it live here: http://personaldj.net/ <br>
