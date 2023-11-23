@@ -1,4 +1,4 @@
-export const API_ROOT_PATH = process.env.NODE_ENV === "production" ? "https://www.personaldj.net" : "http://localhost:8888";
+export const API_ROOT_PATH = process.env.NODE_ENV === "production" ? "" : "http://localhost:8888"; // Blank for production since we just wanna add /api
 
 export const PATHS = {
     api: API_ROOT_PATH + "/api",

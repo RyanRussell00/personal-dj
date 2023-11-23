@@ -14,7 +14,6 @@ const _redirect_uri = process.env.SPOTIFY_CALL_BACK_URI;
 const _client_id = process.env.NODE_SPOTIFY_CLIENT_ID;
 const _client_secret = process.env.NODE_SPOTIFY_CLIENT_SECRET;
 const track_search_limit = 5;
-const directoryPath = __dirname + "/../";
 
 /**
  * Generates a random string containing numbers and letters
@@ -36,15 +35,7 @@ const stateKey = "spotify_auth_state";
 
 const app = express();
 
-// Below lines are used in prod to deploy.
-// https://www.freecodecamp.org/news/deploy-a-react-node-app-to/
-// app.use(express.static(path.join(__dirname, 'ui', 'build')));
-// app.get('/dashboard', (req, res) => {
-//     // res.sendFile(path.join(__dirname, 'ui/build', 'index.html'));
-// })
-
 app
-    .use(express.static(directoryPath))
     .use(helmet())
     .use(compression())
     .use(cors())
