@@ -5,8 +5,9 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "heroku-postbuild": "cd ui && npm i && npm run build",
-    "dev": "nodemon app.js"
+    "start-ui": "cd ui && npm start",
+    "build-ui": "cd ui && npm run build",
+    "postinstall": "cd ui && npm install"
   },
   "author": "",
   "license": "ISC",
