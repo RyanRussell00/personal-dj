@@ -14,6 +14,7 @@ const _redirect_uri = process.env.SPOTIFY_CALL_BACK_URI;
 const _client_id = process.env.NODE_SPOTIFY_CLIENT_ID;
 const _client_secret = process.env.NODE_SPOTIFY_CLIENT_SECRET;
 const track_search_limit = 5;
+const directoryPath = __dirname + "/../build";
 
 /**
  * Generates a random string containing numbers and letters
@@ -36,6 +37,7 @@ const stateKey = "spotify_auth_state";
 const app = express();
 
 app
+    .use(express.static(directoryPath))
     .use(helmet())
     .use(compression())
     .use(cors())
@@ -61,7 +63,7 @@ app.get("/api/login", function (req, res) {
     res.cookie(stateKey, state);
 
     let scope = "playlist-modify-public playlist-modify-private";
-    res.send(
+    res.status(200).send(
         "https://accounts.spotify.com/authorize?" +
         querystring.stringify({
             response_type: "code",
@@ -97,7 +99,6 @@ app.get("/api/callback", function (req, res) {
         },
     })
         .then((response) => {
-            console.log("Callback response token: ", response.data.access_token);
             res.status(200).send({
                 status: response.status,
                 message: "success",
@@ -138,12 +139,12 @@ app.get("/api/trackSearch", function (req, res) {
         },
     })
         .then((response) => {
-            res.send({
+            res.status(200).send({
                 trackResult: response.data,
             });
         })
         .catch((error) => {
-            res.status(400);
+            res.status(500);
             if (error.message === "Request failed with status code 401") {
                 res.status(401);
             }
