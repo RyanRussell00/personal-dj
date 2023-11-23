@@ -17,7 +17,7 @@ export const HandleAuth = () => {
                 }
             }).then((response) => {
                 console.log("Received callback response: ", response);
-                window.location.href = PATHS.dashboard;
+                window.location.href = PATHS.dashboard + "?token=" + response.data.body;
             }).catch((error) => {
                 console.error(error);
                 history.push(PATHS.home);
