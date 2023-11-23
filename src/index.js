@@ -4,21 +4,26 @@ import "./index.css";
 import Home from "./components/Home";
 import reportWebVitals from "./reportWebVitals";
 import Footer from "./components/Footer";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
-import {Dashboard} from "./components/Dashboard";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Dashboard } from "./components/Dashboard";
+import { HandleAuth } from "./components/HandleAuth";
+import { PATHS } from "./utilities/constants";
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <Switch>
-                <Route path="/" exact>
-                    <Home/>
+                <Route path={PATHS.home} exact>
+                    <Home />
                 </Route>
-                <Route path="/dashboard" exact>
-                    <Dashboard/>
+                <Route path={PATHS.callback} exact>
+                    <HandleAuth />
+                </Route>
+                <Route path={PATHS.dashboard} exact>
+                    <Dashboard />
                 </Route>
             </Switch>
-            <Footer/>
+            <Footer />
         </BrowserRouter>
     </React.StrictMode>,
     document.getElementById("root")

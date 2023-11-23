@@ -38,10 +38,10 @@ const app = express();
 
 // Below lines are used in prod to deploy.
 // https://www.freecodecamp.org/news/deploy-a-react-node-app-to/
-app.use(express.static(path.join(__dirname, 'ui', 'build')));
-app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'ui/build', 'index.html'));
-})
+// app.use(express.static(path.join(__dirname, 'ui', 'build')));
+// app.get('/dashboard', (req, res) => {
+//     // res.sendFile(path.join(__dirname, 'ui/build', 'index.html'));
+// })
 
 app
     .use(express.static(directoryPath))
@@ -52,7 +52,11 @@ app
 
 // Preflight
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:8888");
+    const allowedOrigins = ['http://localhost:3000', 'https://personaldj.net'];
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header("Access-Control-Allow-Origin", origin);
+    }
     res.header(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept"
@@ -78,8 +82,12 @@ app.get("/api/login", function (req, res) {
     );
 });
 
-app.get("/callback", function (req, res) {
-    let code = req.query.code || null;
+app.get("/api/callback", function (req, res) {
+    let code = req.query.code;
+    if (!code) {
+        res.status(400).send({ error: "No code provided" });
+        return;
+    }
     // request auth
     const params = {
         client_id: _client_id,
@@ -98,16 +106,17 @@ app.get("/callback", function (req, res) {
         },
     })
         .then((response) => {
-            let token = response.data.access_token;
-            res.redirect("/dashboard?token=" + token);
+            console.log("Callback response token: ", response.data.access_token);
+            res.status(200).send({
+                status: response.status,
+                message: "success",
+                body: response.data.access_token,
+            });
         })
         .catch((error) => {
             console.error("Failed to login: \n" + error);
-            res.redirect(
-                "/#" + querystring.stringify({ authorized: "access_denied" })
-            );
+            res.status(500).send({ error: "Failed to login" });
         });
-    //   }
 });
 
 // Return the string used as a Bearer token

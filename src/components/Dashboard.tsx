@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import { PlaylistParametersForm } from "./PlaylistParametersForm";
 import { PlaylistResultList } from "./PlaylistResultList";
 import logo from "../assets/personal_dj_logo.png";
+import { PATHS } from "../utilities/constants";
 
 export const Dashboard = () => {
     const [selectedTrack, setSelectedTrack] = useState<SearchResultModel>();
@@ -24,7 +25,7 @@ export const Dashboard = () => {
             window.location.search = "";
         } else if (!getTokenFromCookies()) {
             tokenError();
-            history.push("/");
+            history.push(PATHS.home);
         }
     });
 
