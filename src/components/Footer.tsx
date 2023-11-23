@@ -5,10 +5,10 @@ import heart_image from "../assets/8-bit-heart.png";
 const Footer = () => {
     return (
         <footer className="text-center my-5">
-            <hr/>
+            <hr />
             <p>
                 Made with
-                <img className="mx-1" width="20px" src={heart_image} alt={"8 bit heart logo"}/> by
+                <img className="mx-1" width="20px" src={heart_image} alt={"8 bit heart logo"} /> by
                 <a
                     href="https://github.com/RyanRussell00/personal-dj/blob/master/CONTRIBUTORS.md"
                     target="_blank"
@@ -24,7 +24,7 @@ const Footer = () => {
                     Contribute now!
                 </a>
             </p>
-            <small>Version 3.0 -- We used RAID and got rid of the bugs!</small>
+            <small>Support this project by <a href="https://www.buymeacoffee.com/ryandrinkscoffee" target="_blank">buying me a coffe!</a></small>
         </footer>
     );
 };
