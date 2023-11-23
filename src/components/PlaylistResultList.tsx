@@ -131,7 +131,7 @@ export const PlaylistResultList: React.FC<PlaylistResultListProps> = ({ selected
                     onClick={savePlaylist}
                     disabled={currentList.length === 0}
                 >
-                    Save as a Playlist
+                    Save as a Playlist to your Spotify!
                 </button>
                 <form>
                     <div className="custom-control custom-checkbox mb-3">
@@ -176,7 +176,7 @@ export const PlaylistResultList: React.FC<PlaylistResultListProps> = ({ selected
                     onClick={savePlaylist}
                     disabled={currentList.length === 0}
                 >
-                    Save as a Playlist
+                    Save as a Playlist to your Spotify!
                 </button>
             </div>
         </>

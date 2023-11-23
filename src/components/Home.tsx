@@ -18,6 +18,9 @@ const Home = () => {
                         see your email or password, nor do we care to. We just want to find
                         you some good music.
                     </p>
+                    <p>
+                        Brought to you by the team that loves free and fun software. Aka Open Source Software!
+                    </p>
                     <button
                         onClick={login}
                         type="button"
