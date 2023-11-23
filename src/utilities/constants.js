@@ -1,4 +1,4 @@
-export const API_ROOT_PATH = process.env.NODE_ENV === "production" ? "https://personaldj.net" : "http://localhost:8888";
+export const API_ROOT_PATH = process.env.NODE_ENV === "production" ? "https://www.personaldj.net" : "http://localhost:8888";
 
 export const PATHS = {
     api: API_ROOT_PATH + "/api",
