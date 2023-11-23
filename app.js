@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express"); // Express web server framework
 const ax = require("axios");
 const cors = require("cors");
@@ -5,20 +6,13 @@ const querystring = require("querystring");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const compression = require("compression");
-const {response} = require("express");
 const path = require('path');
 
-// production stuff
-var _port = 8888;
-// var _redir_port = 3000;
-var _redirect_uri = "http://localhost:" + _port + "/callback/";
-if (process.env.NODE_ENV === "production") {
-    _port = process.env.PORT;
-    _redirect_uri = process.env.SPOTIFY_CALL_BACK_URI;
-}
+const _port = process.env.PORT || 8888;
+const _redirect_uri = process.env.SPOTIFY_CALL_BACK_URI;
 
-const _client_id = process.env.NODE_SPOTIFY_CLIENT_ID || null;
-const _client_secret = process.env.NODE_SPOTIFY_CLIENT_SECRET || null;
+const _client_id = process.env.NODE_SPOTIFY_CLIENT_ID;
+const _client_secret = process.env.NODE_SPOTIFY_CLIENT_SECRET;
 const track_search_limit = 5;
 const directoryPath = __dirname + "/../";
 
@@ -110,7 +104,7 @@ app.get("/callback", function (req, res) {
         .catch((error) => {
             console.error("Failed to login: \n" + error);
             res.redirect(
-                "/#" + querystring.stringify({authorized: "access_denied"})
+                "/#" + querystring.stringify({ authorized: "access_denied" })
             );
         });
     //   }
@@ -250,7 +244,7 @@ app.get("/api/createPlaylist", function (req, res) {
     ax({
         method: "get",
         url: "https://api.spotify.com/v1/me",
-        headers: {Authorization: getBearerAuthHeader(req.query.token)},
+        headers: { Authorization: getBearerAuthHeader(req.query.token) },
     })
         .then((response) => {
             // on success get id and create playlist
