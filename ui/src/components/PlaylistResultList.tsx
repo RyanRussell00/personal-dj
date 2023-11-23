@@ -1,27 +1,27 @@
-import React, {ChangeEvent, useEffect, useRef, useState} from "react";
-import {useForm, SubmitHandler} from "react-hook-form";
-import {getTokenFromCookies, saveToken, tokenError} from "../utilities/cookieHandler";
-import {useHistory} from 'react-router-dom';
-import {SearchResultList} from "./SearchResultList";
-import {SearchResultModel} from "../models/SearchResultModel";
-import axios, {AxiosResponse} from "axios";
-import {PATHS} from "../utilities/constants";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { getTokenFromCookies, saveToken, tokenError } from "../utilities/cookieHandler";
+import { useHistory } from 'react-router-dom';
+import { SearchResultList } from "./SearchResultList";
+import { SearchResultModel } from "../models/SearchResultModel";
+import axios, { AxiosResponse } from "axios";
+import { PATHS } from "../utilities/constants";
 import {
     idsFromTracks,
     mapJSONRecommendedTracksToModel,
     mapJSONTrackSearchToModel
 } from "../utilities/JSONMapperUtilities";
-import {handleError} from "../utilities/apiErrorHandler";
-import {LoadingAnimation} from "../utilities/LoadingAnimation";
-import {PlaylistParametersModel} from "../models/PlaylistParametersModel";
-import {PlaylistTrackModel} from "../models/PlaylistTrackModel";
+import { handleError } from "../utilities/apiErrorHandler";
+import { LoadingAnimation } from "../utilities/LoadingAnimation";
+import { PlaylistParametersModel } from "../models/PlaylistParametersModel";
+import { PlaylistTrackModel } from "../models/PlaylistTrackModel";
 
 type PlaylistResultListProps = {
     selectedTrack: SearchResultModel,
     parameters: PlaylistParametersModel
 }
 
-export const PlaylistResultList: React.FC<PlaylistResultListProps> = ({selectedTrack, parameters}) => {
+export const PlaylistResultList: React.FC<PlaylistResultListProps> = ({ selectedTrack, parameters }) => {
 
     const explicitResults = useRef<PlaylistTrackModel[]>([]);
     const nonExplicitResults = useRef<PlaylistTrackModel[]>([]);
@@ -55,9 +55,9 @@ export const PlaylistResultList: React.FC<PlaylistResultListProps> = ({selectedT
                     valence: parameters.positiveness,
                 },
             }).then((resp) => {
-            [explicitResults.current, nonExplicitResults.current] = mapJSONRecommendedTracksToModel(resp);
-            setCurrentList(explicitResults.current);
-        })
+                [explicitResults.current, nonExplicitResults.current] = mapJSONRecommendedTracksToModel(resp);
+                setCurrentList(explicitResults.current);
+            })
             .catch((err) => handleError(err))
             .finally(() => setLoading(false));
     }, [parameters]);
@@ -127,11 +127,12 @@ export const PlaylistResultList: React.FC<PlaylistResultListProps> = ({selectedT
 
     return (
         <>
-            <LoadingAnimation show={loading}/>
+            <LoadingAnimation show={loading} />
             <div>
                 <button
                     className="btn btn-success text-white my-3 p-4"
                     onClick={savePlaylist}
+                    disabled={currentList.length === 0}
                 >
                     Save as a Playlist
                 </button>
@@ -150,32 +151,33 @@ export const PlaylistResultList: React.FC<PlaylistResultListProps> = ({selectedT
                 </form>
             </div>
             {!loading &&
-            <div className="search-results">
-                <h2>{currentList.length} tracks found</h2>
-                {
-                    currentList.map((track) => {
-                        return (<div className="col-lg col-sm-3 m-1">
-                            <div
-                                className={"card shadow track my-2 d-block"}
-                            >
-                                <img className="card-img-top" src={track.imgUrl}/>
-                                <p className="card-title py-2">
-                                    {track.title}
-                                    <br/>
-                                    <i>by {track.artistName}</i>
-                                    <br/>
-                                    <i>{track.explicit ? "Explicit" : "Non-Explicit"}</i>
-                                </p>
-                            </div>
-                        </div>)
-                    })
-                }
-            </div>
+                <div className="search-results">
+                    <h2>{currentList.length} tracks found</h2>
+                    {
+                        currentList.map((track) => {
+                            return (<div className="col-lg col-sm-3 m-1">
+                                <div
+                                    className={"card shadow track my-2 d-block"}
+                                >
+                                    <img className="card-img-top" src={track.imgUrl} />
+                                    <p className="card-title py-2">
+                                        {track.title}
+                                        <br />
+                                        <i>by {track.artistName}</i>
+                                        <br />
+                                        <i>{track.explicit ? "Explicit" : "Non-Explicit"}</i>
+                                    </p>
+                                </div>
+                            </div>)
+                        })
+                    }
+                </div>
             }
             <div className={"text-center"}>
                 <button
                     className="btn btn-success text-white my-3 p-4"
                     onClick={savePlaylist}
+                    disabled={currentList.length === 0}
                 >
                     Save as a Playlist
                 </button>

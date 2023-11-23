@@ -210,7 +210,7 @@ app.get("/api/recommendations", function (req, res) {
 });
 
 function getReadablePlaylistParameters(data) {
-    let dataAsJSON = JSON.parse(data);
+    let dataAsJSON = data;
     let result = ``;
     for (let key in dataAsJSON) {
         if (dataAsJSON[key] && dataAsJSON[key] !== "")
@@ -225,12 +225,12 @@ app.get("/api/createPlaylist", function (req, res) {
     let date = new Date();
     let dateStr =
         +date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
-
-    let track = JSON.parse(req.query.seed_track);
+    console.log(req.query)
+    let track = req.query.seed_track;
     let playlist_params = req.query.playlist_params;
 
     let name = "Playlist made by PersonalDJ";
-    let desc = "Go to personaldj.net to make a free Personally DJ'd Playlist now! ~~~ Created on ";
+    let desc = "Visit personaldj.net to create a free customized playlist now! ~~~ Created on ";
 
     // NOTE: Spotify does not support line breaks or tabs in the description
     if (track && playlist_params) {
