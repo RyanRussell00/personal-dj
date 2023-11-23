@@ -1,8 +1,5 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
 import { getTokenFromCookies, saveToken, tokenError } from "../utilities/cookieHandler";
-import { useHistory } from 'react-router-dom';
-import { SearchResultList } from "./SearchResultList";
 import { SearchResultModel } from "../models/SearchResultModel";
 import axios, { AxiosResponse } from "axios";
 import { PATHS } from "../utilities/constants";

@@ -38,7 +38,7 @@ const app = express();
 
 // Below lines are used in prod to deploy.
 // https://www.freecodecamp.org/news/deploy-a-react-node-app-to/
-app.use(express.static(path.join(__dirname, 'ui/build')));
+app.use(express.static(path.join(__dirname, 'ui', 'build')));
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'ui/build', 'index.html'));
 })

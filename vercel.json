@@ -13,7 +13,7 @@
     "routes": [
         {
             "src": "/ui/(.*)",
-            "dest": "ui/$1"
+            "dest": "build/$1"
         },
         {
             "src": "/(.*)",
