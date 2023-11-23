@@ -2,7 +2,7 @@
   "name": "personaldj-ui",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "https://www.personaldj.net/",
   "proxy": "http://localhost:8888/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
